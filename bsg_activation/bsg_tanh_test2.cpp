@@ -3,6 +3,7 @@
 #include <iostream>
 #include <math.h>
 #include "params_def.h" 
+#include <sstream>
 
 #if VM_TRACE			
 #include <verilated_vcd_c.h> 
@@ -142,6 +143,8 @@ int main(int argc, char **argv, char **env)
 		}
 	}	
 
+	std::cout<<std::endl;
+
     // double aver_squa_err_tanh = 0;
 
 	// double aver_err_sinh, aver_err_cosh, aver_err_tanh;
@@ -158,6 +161,13 @@ int main(int argc, char **argv, char **env)
 
         //double obser_value_tanh = result_tanh[i+(negprec+posiprec+1+2)]/pow(2,precision);
 		double obser_value_tanh = result_tanh[i]/pow(2,precision);
+
+		// std::cout<<std::endl;
+		// std::stringstream ss;
+		// ss<< std::hex << result_tanh[i];
+		// std::string res ( ss.str() );
+
+		// std::cout<<res;
 
         float err_tanh = (ideal_value_tanh - obser_value_tanh)/ideal_value_tanh;
 

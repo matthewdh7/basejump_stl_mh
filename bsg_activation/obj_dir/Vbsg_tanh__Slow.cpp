@@ -33,52 +33,12 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vbsg_tanh::_settle__TOP__2\n"); );
     Vbsg_tanh* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Variables
-    WData/*159:0*/ __Vtemp14[5];
+    WData/*159:0*/ __Vtemp15[5];
     // Body
     vlTOPp->val_o = (3U == (IData)(vlTOPp->bsg_tanh__DOT__state_r));
+    vlTOPp->tanh_o = vlTOPp->bsg_tanh__DOT__tanh_r;
     vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__calc_done 
         = (0x30U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__calc_cnt));
-    vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__neg_ld = 0U;
-    if (((((((((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-               | (1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-              | (2U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-             | (3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-            | (4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-           | (5U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-          | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-         | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
-        if ((0U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            if ((1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__neg_ld = 1U;
-            }
-        }
-    }
-    vlTOPp->bsg_tanh__DOT__divider__DOT__opB_ld_lo = 0U;
-    if (((((((((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-               | (1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-              | (2U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-             | (3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-            | (4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-           | (5U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-          | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-         | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
-        if ((0U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            vlTOPp->bsg_tanh__DOT__divider__DOT__opB_ld_lo 
-                = ((1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-                   | ((2U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-                      & ((3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-                         | ((4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-                            | ((5U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-                               | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))))));
-        }
-    } else {
-        if ((8U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            vlTOPp->bsg_tanh__DOT__divider__DOT__opB_ld_lo = 0U;
-        }
-    }
-    vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__calc_up_li 
-        = ((4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-           & (0x30U > (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__calc_cnt)));
     vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val_ans = 
         ((0xffffeU & vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val_ans) 
          | (1U & vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val));
@@ -942,11 +902,10 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
             = (vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__x[0x13U] 
                + VL_SHIFTRS_III(32,32,32, vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__y[0x13U], 0xcU));
     }
-    vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__stall_pipe 
-        = (1U & ((vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val 
-                  >> 0x14U) & (~ ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-                                  & (0U == (IData)(vlTOPp->bsg_tanh__DOT__state_r))))));
-    vlTOPp->bsg_tanh__DOT__divider__DOT__opA_sel_lo = 0U;
+    vlTOPp->bsg_tanh__DOT____Vcellinp__divider__v_i 
+        = ((vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val 
+            >> 0x14U) & (1U == (IData)(vlTOPp->bsg_tanh__DOT__state_r)));
+    vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__neg_ld = 0U;
     if (((((((((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
                | (1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
               | (2U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
@@ -955,28 +914,42 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
            | (5U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
           | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
          | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
-        if ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            if ((0x100000U & vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val)) {
-                vlTOPp->bsg_tanh__DOT__divider__DOT__opA_sel_lo = 2U;
-            }
-        } else {
+        if ((0U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
             if ((1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                vlTOPp->bsg_tanh__DOT__divider__DOT__opA_sel_lo = 1U;
-            } else {
-                if ((2U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                    if ((3U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                        if ((4U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                            if ((5U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                                if ((6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                                    vlTOPp->bsg_tanh__DOT__divider__DOT__opA_sel_lo = 1U;
-                                }
-                            }
-                        }
-                    }
-                }
+                vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__neg_ld = 1U;
             }
         }
     }
+    vlTOPp->bsg_tanh__DOT__divider__DOT__opB_ld_lo = 0U;
+    if (((((((((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+               | (1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+              | (2U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+             | (3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+            | (4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+           | (5U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+          | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+         | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
+        if ((0U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+            vlTOPp->bsg_tanh__DOT__divider__DOT__opB_ld_lo 
+                = ((1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+                   | ((2U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+                      & ((3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+                         | ((4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+                            | ((5U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+                               | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))))));
+        }
+    } else {
+        if ((8U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+            vlTOPp->bsg_tanh__DOT__divider__DOT__opB_ld_lo = 0U;
+        }
+    }
+    vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__calc_up_li 
+        = ((4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+           & (0x30U > (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__calc_cnt)));
+    vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__stall_pipe 
+        = (1U & ((vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val 
+                  >> 0x14U) & (~ ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+                                  & (0U == (IData)(vlTOPp->bsg_tanh__DOT__state_r))))));
     vlTOPp->bsg_tanh__DOT__divider__DOT__opB_sel_lo = 1U;
     if (((((((((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
                | (1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
@@ -1004,39 +977,6 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
                             } else {
                                 if ((6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
                                     vlTOPp->bsg_tanh__DOT__divider__DOT__opB_sel_lo = 4U;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 1U;
-    if (((((((((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-               | (1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-              | (2U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-             | (3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-            | (4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-           | (5U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-          | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
-         | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
-        if ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            if ((0x100000U & vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val)) {
-                vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 4U;
-            }
-        } else {
-            if ((1U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                if ((2U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                    vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 2U;
-                } else {
-                    if ((3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                        vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 1U;
-                    } else {
-                        if ((4U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                            if ((5U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                                if ((6U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-                                    vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 2U;
                                 }
                             }
                         }
@@ -1187,7 +1127,7 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
           | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
          | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
         if ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            if ((0x100000U & vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val)) {
+            if (vlTOPp->bsg_tanh__DOT____Vcellinp__divider__v_i) {
                 vlTOPp->bsg_tanh__DOT__divider__DOT__latch_signed_div_lo = 1U;
             }
         }
@@ -1202,7 +1142,7 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
           | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
          | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
         if ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            if ((0x100000U & vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val)) {
+            if (vlTOPp->bsg_tanh__DOT____Vcellinp__divider__v_i) {
                 vlTOPp->bsg_tanh__DOT__divider__DOT__opC_ld_lo = 1U;
             }
         } else {
@@ -1219,7 +1159,6 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
             vlTOPp->bsg_tanh__DOT__divider__DOT__opC_ld_lo = 0U;
         }
     }
-    vlTOPp->tanh_o = (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r);
     vlTOPp->bsg_tanh__DOT__divider__DOT__opA_ld_lo = 0U;
     if (((((((((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
                | (1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
@@ -1230,7 +1169,7 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
           | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
          | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
         if ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            if ((0x100000U & vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val)) {
+            if (vlTOPp->bsg_tanh__DOT____Vcellinp__divider__v_i) {
                 vlTOPp->bsg_tanh__DOT__divider__DOT__opA_ld_lo = 1U;
             }
         } else {
@@ -1255,6 +1194,70 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
     } else {
         if ((8U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
             vlTOPp->bsg_tanh__DOT__divider__DOT__opA_ld_lo = 0U;
+        }
+    }
+    vlTOPp->bsg_tanh__DOT__divider__DOT__opA_sel_lo = 0U;
+    if (((((((((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+               | (1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+              | (2U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+             | (3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+            | (4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+           | (5U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+          | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+         | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
+        if ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+            if (vlTOPp->bsg_tanh__DOT____Vcellinp__divider__v_i) {
+                vlTOPp->bsg_tanh__DOT__divider__DOT__opA_sel_lo = 2U;
+            }
+        } else {
+            if ((1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                vlTOPp->bsg_tanh__DOT__divider__DOT__opA_sel_lo = 1U;
+            } else {
+                if ((2U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                    if ((3U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                        if ((4U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                            if ((5U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                                if ((6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                                    vlTOPp->bsg_tanh__DOT__divider__DOT__opA_sel_lo = 1U;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 1U;
+    if (((((((((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+               | (1U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+              | (2U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+             | (3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+            | (4U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+           | (5U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+          | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
+         | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
+        if ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+            if (vlTOPp->bsg_tanh__DOT____Vcellinp__divider__v_i) {
+                vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 4U;
+            }
+        } else {
+            if ((1U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                if ((2U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                    vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 2U;
+                } else {
+                    if ((3U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                        vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 1U;
+                    } else {
+                        if ((4U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                            if ((5U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                                if ((6U != (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
+                                    vlTOPp->bsg_tanh__DOT__divider__DOT__opC_sel_lo = 2U;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     vlTOPp->ready_o = ((0U == (IData)(vlTOPp->bsg_tanh__DOT__state_r)) 
@@ -1294,7 +1297,7 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
           | (6U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
          | (7U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
         if ((0U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            if ((0x100000U & vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__val)) {
+            if (vlTOPp->bsg_tanh__DOT____Vcellinp__divider__v_i) {
                 vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__next_state = 1U;
             }
         } else {
@@ -1406,7 +1409,7 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
                                                 << 2U)))) 
            | (0xfffe0000U & ((IData)((vlTOPp->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r 
                                       >> 0x20U)) << 2U)));
-    __Vtemp14[4U] = ((0x1ffffU & ((3U & ((IData)((0xffffffffffffULL 
+    __Vtemp15[4U] = ((0x1ffffU & ((3U & ((IData)((0xffffffffffffULL 
                                                   & ((QData)((IData)(
                                                                      vlTOPp->bsg_tanh__DOT__sinhcosh__DOT__y[0x14U])) 
                                                      << 0x10U))) 
@@ -1471,7 +1474,7 @@ void Vbsg_tanh::_settle__TOP__2(Vbsg_tanh__Syms* __restrict vlSymsp) {
                                          << 0x10U))) 
                              << 2U)));
     vlTOPp->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk2__DOT__muxC__data_i[4U] 
-        = __Vtemp14[4U];
+        = __Vtemp15[4U];
     vlTOPp->bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked[0U] 
         = (IData)((0x1ffffffffffffULL & ((((QData)((IData)(
                                                            vlTOPp->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
@@ -3978,8 +3981,10 @@ void Vbsg_tanh::_ctor_var_reset() {
     tanh_o = VL_RAND_RESET_I(32);
     ready_o = VL_RAND_RESET_I(1);
     val_o = VL_RAND_RESET_I(1);
+    bsg_tanh__DOT__tanh_r = VL_RAND_RESET_I(32);
     bsg_tanh__DOT__state_r = VL_RAND_RESET_I(2);
     bsg_tanh__DOT__state_n = VL_RAND_RESET_I(2);
+    bsg_tanh__DOT____Vcellinp__divider__v_i = VL_RAND_RESET_I(1);
     VL_RAND_RESET_W(672, bsg_tanh__DOT__sinhcosh__DOT__x);
     VL_RAND_RESET_W(672, bsg_tanh__DOT__sinhcosh__DOT__y);
     VL_RAND_RESET_W(441, bsg_tanh__DOT__sinhcosh__DOT__ang);

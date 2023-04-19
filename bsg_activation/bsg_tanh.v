@@ -8,6 +8,7 @@
     `include "../bsg_misc/bsg_adder_cin.v"
     `include "../bsg_misc/bsg_idiv_iterative_controller.v"
     `include "../bsg_misc/bsg_counter_clear_up.v"
+    `include "../bsg_dataflow/bsg_one_fifo.v"
     /* verilator lint_on WIDTH */
     /* verilator lint_on CASEINCOMPLETE */
 
@@ -23,7 +24,7 @@
     ,output val_o
     );
 
-    logic signed [ans_width_p-1:0] sinh, cosh;
+    logic signed [ans_width_p-1:0] sinh, cosh, tanh_r, tanh_n;
     logic sincosReady, sincosDone, tanReady, tanDone;
     
     
@@ -77,7 +78,7 @@
      .clk_i
     ,.reset_i       
 
-    ,.v_i           (sincosDone)
+    ,.v_i           (sincosDone && (state_r == eBUSY1))
     ,.ready_and_o   (tanReady) 
 
     ,.dividend_i    (sinh_shifted)
@@ -92,9 +93,16 @@
 
     /* outbound signals */
     //assign tanh_crop = tanh_shifted >> SHFT_AMT;
-    assign tanh_o = tanh_shifted[ans_width_p-1:0];
+    assign tanh_n = tanh_shifted[ans_width_p-1:0];
     assign val_o = state_r == eDONE;
     assign ready_o = (state_r == eWAIT) && (sincosReady);
+
+    always_ff @(posedge clk_i) begin
+        if (tanDone)    tanh_r <= tanh_n;
+        else            tanh_r <= tanh_r;
+    end
+
+    assign tanh_o = tanh_r;
 
     
     endmodule

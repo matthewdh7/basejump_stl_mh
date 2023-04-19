@@ -211,6 +211,7 @@ VL_MODULE(Vbsg_tanh) {
         CData/*2:0*/ bsg_tanh__DOT__divider__DOT__genblk2__DOT__muxC__DOT__reduce__BRA__46__KET____DOT__gather;
         CData/*2:0*/ bsg_tanh__DOT__divider__DOT__genblk2__DOT__muxC__DOT__reduce__BRA__47__KET____DOT__gather;
         CData/*2:0*/ bsg_tanh__DOT__divider__DOT__genblk2__DOT__muxC__DOT__reduce__BRA__48__KET____DOT__gather;
+        IData/*31:0*/ bsg_tanh__DOT__tanh_r;
         WData/*671:0*/ bsg_tanh__DOT__sinhcosh__DOT__x[21];
         WData/*671:0*/ bsg_tanh__DOT__sinhcosh__DOT__y[21];
         WData/*440:0*/ bsg_tanh__DOT__sinhcosh__DOT__ang[14];
@@ -233,6 +234,7 @@ VL_MODULE(Vbsg_tanh) {
     
     // LOCAL VARIABLES
     // Internals; generally not touched by application code
+    CData/*0:0*/ bsg_tanh__DOT____Vcellinp__divider__v_i;
     CData/*7:0*/ __Vtableidx1;
     CData/*0:0*/ __Vclklast__TOP__clk_i;
     WData/*97:0*/ bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[4];

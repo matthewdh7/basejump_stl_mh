@@ -59,9 +59,11 @@ clean:
 
 setup:
 	cd $$HOME/verilator
+	git checkout v4.106
+	mkdir install
 	autoconf
 	./configure --prefix=$$PWD/install
-	make -j8
+	make
 	make install
 
 	export VERILATOR_ROOT=$$HOME/verilator

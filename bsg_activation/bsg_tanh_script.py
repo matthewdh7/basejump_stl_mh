@@ -2,14 +2,18 @@ import sys, math
 
 def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extriter, precision):
     print("""
-    `include "../../basejump_stl/bsg_misc/bsg_defines.v"
-    `include "bsg_idiv_iterative.v"
-    `include "../../basejump_stl/bsg_misc/bsg_dff_en.v"
-    `include "../../basejump_stl/bsg_misc/bsg_mux_one_hot.v"
-    `include "../../basejump_stl/bsg_misc/bsg_adder_cin.v"
-    `include "bsg_idiv_iterative_controller.v"
-    `include "../../basejump_stl/bsg_misc/bsg_counter_clear_up.v"
-    
+    /* verilator lint_off WIDTH */
+    /* verilator lint_off CASEINCOMPLETE */
+    `include "bsg_defines.v"
+    `include "../bsg_misc/bsg_idiv_iterative.v"
+    `include "../bsg_misc/bsg_dff_en.v"
+    `include "../bsg_misc/bsg_mux_one_hot.v"
+    `include "../bsg_misc/bsg_adder_cin.v"
+    `include "../bsg_misc/bsg_idiv_iterative_controller.v"
+    `include "../bsg_misc/bsg_counter_clear_up.v"
+    /* verilator lint_on WIDTH */
+    /* verilator lint_on CASEINCOMPLETE */
+
     module bsg_tanh #(parameter neg_prec_p=6, posi_prec_p=12, extr_iter_p=1, ans_width_p = 32, ang_width_p = 21, precision=16)
     (
     input clk_i

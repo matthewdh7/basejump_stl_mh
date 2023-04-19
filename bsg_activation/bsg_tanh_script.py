@@ -11,7 +11,6 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
     `include "../bsg_misc/bsg_adder_cin.v"
     `include "../bsg_misc/bsg_idiv_iterative_controller.v"
     `include "../bsg_misc/bsg_counter_clear_up.v"
-    `include "../bsg_dataflow/bsg_one_fifo.v"
     /* verilator lint_on WIDTH */
     /* verilator lint_on CASEINCOMPLETE */
 

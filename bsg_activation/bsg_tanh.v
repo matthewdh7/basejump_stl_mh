@@ -8,7 +8,6 @@
     `include "../bsg_misc/bsg_adder_cin.v"
     `include "../bsg_misc/bsg_idiv_iterative_controller.v"
     `include "../bsg_misc/bsg_counter_clear_up.v"
-    `include "../bsg_dataflow/bsg_one_fifo.v"
     /* verilator lint_on WIDTH */
     /* verilator lint_on CASEINCOMPLETE */
 
@@ -92,12 +91,11 @@
     );
 
     /* outbound signals */
-    //assign tanh_crop = tanh_shifted >> SHFT_AMT;
     always_comb begin
-        if (tanh_shifted[SHFT_AMT] == 1) tanh_n = {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}};
-        else    tanh_n = tanh_shifted[ans_width_p-1:0];
+        //if value of output exceeds 1 (decimal) then hard set to 1, otherwise keep normal output
+        if (tanh_shifted[SHFT_AMT] == 1)    tanh_n = {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}};
+        else                                tanh_n = tanh_shifted[ans_width_p-1:0];
     end
-    //assign tanh_n = tanh_shifted[ans_width_p-1:0];
     assign val_o = state_r == eDONE;
     assign ready_o = (state_r == eWAIT) && (sincosReady);
 

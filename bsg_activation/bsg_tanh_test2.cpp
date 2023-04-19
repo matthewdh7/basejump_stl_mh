@@ -45,8 +45,7 @@ double maxquant = theta_final*pow(2,precision);
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
-// unsigned long int startquant = pow(2,startquant_pow);
-unsigned long int startquant = 1000; //FFFF in hex without the 1
+unsigned long int startquant = 2500;
 unsigned long int currquant = startquant;
 
 // The starting quantity is a very important parameter of testing. Due to truncation effect
@@ -66,14 +65,10 @@ unsigned long int numsamples = 100;
 // high errors. If the test fails, the first thing to check is `sample_width`.
 
 unsigned long int sample_width = round((maxquant-startquant)/numsamples);
-																			
-unsigned long int startquant_print = startquant;	
-														
+																																	
 unsigned long int *samples;													
 
 unsigned long int *result_tanh;
-
-unsigned long int clkcycles = numsamples+posiprec+negprec+4;
 
 int main(int argc, char **argv, char **env)
 {
@@ -86,8 +81,7 @@ int main(int argc, char **argv, char **env)
 	#endif
 
 	int samp_len = 0;
-	samples = new unsigned long int [clkcycles];
-    //result_tanh = new unsigned long int [clkcycles];
+	samples = new unsigned long int [numsamples];
 	result_tanh = new unsigned long int [0];
 	int valid_in = 1;
 	int ready_in = 1;
@@ -97,7 +91,6 @@ int main(int argc, char **argv, char **env)
 	tfp->open ("CORDIC_tanh.vcd");
 	#endif
 
-	//for(int i=0;i<clkcycles;i++){
 	for(int i=0;i<numsamples;i++){
 		for(int j=0; j<100; j++) {
 			if (top->val_o) {
@@ -105,7 +98,7 @@ int main(int argc, char **argv, char **env)
 			}
 			if(j==0) {
 					top->ang_i = currquant;
-					samples[i] = top->ang_i;
+					samples[i] = currquant;
 					currquant += sample_width;
 					samp_len++;
 
@@ -143,10 +136,6 @@ int main(int argc, char **argv, char **env)
 
 	std::cout<<std::endl;
 
-    // double aver_squa_err_tanh = 0;
-
-	// double aver_err_sinh, aver_err_cosh, aver_err_tanh;
-
     float maxerr_tanh = 0;
 	float avgerr_tanh;
 
@@ -167,6 +156,8 @@ int main(int argc, char **argv, char **env)
 			maxerr_tanh = err_tanh;
 			max_err_samp_tanh = samp;
 		}
+
+		//print test case information each iteration
 		std::cout<<std::endl;
 		std::cout<<"Input "<<i+1<<" tested:"<<samp<<std::endl;
 		std::cout<<"Output expected:"<<ideal_value_tanh<<std::endl;
@@ -178,7 +169,9 @@ int main(int argc, char **argv, char **env)
 	std::cout<<std::endl;
 	std::cout<<std::endl;
 	
-	std::cout<<"Range of input tested:"<<startquant/pow(2, precision)<<" to "<<maxquant/pow(2,precision)<<std::endl;
+	//print overall results
+	std::cout<<"Range of input tested: "<<startquant/pow(2, precision)<<" to "<<maxquant/pow(2,precision);
+	std::cout<<" with a spacing of "<<sample_width/pow(2, precision)<<std::endl;
 	std::cout<<"Average error:"<<avgerr_tanh*100<<"%"<<std::endl;
 
 	#if VM_TRACE

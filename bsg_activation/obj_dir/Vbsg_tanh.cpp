@@ -30,7 +30,7 @@ void Vbsg_tanh::eval_step() {
             Verilated::debug(1);
             __Vchange = _change_request(vlSymsp);
             Verilated::debug(__Vsaved_debug);
-            VL_FATAL_MT("bsg_tanh.v", 15, "",
+            VL_FATAL_MT("bsg_tanh.v", 14, "",
                 "Verilated model didn't converge\n"
                 "- See DIDNOTCONVERGE in the Verilator manual");
         } else {
@@ -55,7 +55,7 @@ void Vbsg_tanh::_eval_initial_loop(Vbsg_tanh__Syms* __restrict vlSymsp) {
             Verilated::debug(1);
             __Vchange = _change_request(vlSymsp);
             Verilated::debug(__Vsaved_debug);
-            VL_FATAL_MT("bsg_tanh.v", 15, "",
+            VL_FATAL_MT("bsg_tanh.v", 14, "",
                 "Verilated model didn't DC converge\n"
                 "- See DIDNOTCONVERGE in the Verilator manual");
         } else {

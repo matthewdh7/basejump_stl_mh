@@ -639,7 +639,11 @@ VL_INLINE_OPT void Vbsg_tanh::_sequent__TOP__1(Vbsg_tanh__Syms* __restrict vlSym
                              << 1U)));
     }
     vlTOPp->bsg_tanh__DOT__tanh_r = ((8U == (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__state))
-                                      ? (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r)
+                                      ? ((1U & (IData)(
+                                                       (vlTOPp->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r 
+                                                        >> 0x10U)))
+                                          ? 0x10000U
+                                          : (IData)(vlTOPp->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r))
                                       : vlTOPp->bsg_tanh__DOT__tanh_r);
     vlTOPp->bsg_tanh__DOT__divider__DOT__control__DOT__calc_cnt 
         = __Vdly__bsg_tanh__DOT__divider__DOT__control__DOT__calc_cnt;

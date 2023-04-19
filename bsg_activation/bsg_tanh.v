@@ -93,7 +93,11 @@
 
     /* outbound signals */
     //assign tanh_crop = tanh_shifted >> SHFT_AMT;
-    assign tanh_n = tanh_shifted[ans_width_p-1:0];
+    always_comb begin
+        if (tanh_shifted[SHFT_AMT] == 1) tanh_n = {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}};
+        else    tanh_n = tanh_shifted[ans_width_p-1:0];
+    end
+    //assign tanh_n = tanh_shifted[ans_width_p-1:0];
     assign val_o = state_r == eDONE;
     assign ready_o = (state_r == eWAIT) && (sincosReady);
 

@@ -46,7 +46,8 @@ double maxquant = theta_final*pow(2,precision);
 // iterations.
 									  
 // unsigned long int startquant = pow(2,startquant_pow);
-unsigned long int startquant = 10000; //FFFF in hex without the 1
+unsigned long int startquant = 1000; //FFFF in hex without the 1
+unsigned long int currquant = startquant;
 
 // The starting quantity is a very important parameter of testing. Due to truncation effect
 // the sense of magnitude of smaller numbers is lost and results in high error. The starting quantity can be
@@ -58,13 +59,13 @@ unsigned long int startquant = 10000; //FFFF in hex without the 1
 // at least 8-12 bits for decimal point to get above rated results.
 
 // unsigned long int numsamples = (pow(2,anglen-1)-1);
-unsigned long int numsamples = 5;
+unsigned long int numsamples = 100;
 
 // While testing please be very careful of the number of samples. Sometimes the
 // anglen can make the sample_width = 0 which will definitely result in unnecessary
 // high errors. If the test fails, the first thing to check is `sample_width`.
 
-// unsigned long int sample_width = round((maxquant-startquant)/numsamples);
+unsigned long int sample_width = round((maxquant-startquant)/numsamples);
 																			
 unsigned long int startquant_print = startquant;	
 														
@@ -103,17 +104,14 @@ int main(int argc, char **argv, char **env)
 				result_tanh[i] = top->tanh_o;
 			}
 			if(j==0) {
-				
-					top->ang_i = startquant*(i+1);
-					samples[i] = startquant*(i+1);
+					top->ang_i = currquant;
+					samples[i] = top->ang_i;
+					currquant += sample_width;
 					samp_len++;
-					
 
 					top->val_i = valid_in;
 					top->ready_i = ready_in;
 
-					result_tanh[0] = top->tanh_o;
-					//startquant+=sample_width;
 					int val_i = top->val_i;
 					int val_o = top->val_o;
 					int ready_i = top->ready_i;
@@ -159,23 +157,11 @@ int main(int argc, char **argv, char **env)
 
         double ideal_value_tanh = tanh(samp);
 
-        //double obser_value_tanh = result_tanh[i+(negprec+posiprec+1+2)]/pow(2,precision);
 		double obser_value_tanh = result_tanh[i]/pow(2,precision);
-
-		// std::cout<<std::endl;
-		// std::stringstream ss;
-		// ss<< std::hex << result_tanh[i];
-		// std::string res ( ss.str() );
-
-		// std::cout<<res;
 
         float err_tanh = (ideal_value_tanh - obser_value_tanh)/ideal_value_tanh;
 
 		avgerr_tanh += err_tanh;
-
-        //double tanh_err = err_tanh*err_tanh;
-
-        //aver_squa_err_tanh+=tanh_err;
 
         if(maxerr_tanh<fabs(err_tanh)){
 			maxerr_tanh = err_tanh;
@@ -187,18 +173,12 @@ int main(int argc, char **argv, char **env)
 		std::cout<<"Output received:"<<obser_value_tanh<<std::endl;
 		std::cout<<"Error:"<<err_tanh*100<<"%"<<std::endl;
 	}
-	// aver_squa_err_tanh/=samp_len;
 	avgerr_tanh /= numsamples;
 
-	double input_value_print = startquant/pow(2, precision);
-	double ideal_value_tanh = tanh(startquant/pow(2,precision));
-	double obser_value_tanh = result_tanh[0]/pow(2,precision);
-	float err_tanh = (ideal_value_tanh - obser_value_tanh) / ideal_value_tanh;
-
-	//float stan_dev_tanh = sqrt(aver_squa_err_tanh);
 	std::cout<<std::endl;
 	std::cout<<std::endl;
 	
+	std::cout<<"Range of input tested:"<<startquant/pow(2, precision)<<" to "<<maxquant/pow(2,precision)<<std::endl;
 	std::cout<<"Average error:"<<avgerr_tanh*100<<"%"<<std::endl;
 
 	#if VM_TRACE

@@ -2,7 +2,7 @@
 # DESCRIPTION: Verilator output: Make include file with class lists
 #
 # This file lists generated Verilated files, for including in higher level makefiles.
-# See Vbsg_tanh.mk for the caller.
+# See Vbsg_cordic_sine_cosine_hyperbolic.mk for the caller.
 
 ### Switches...
 # C11 constructs required?  0/1 (always on now)
@@ -27,21 +27,20 @@ VM_TRACE_FST_WRITER_THREAD = 0
 ### Object file lists...
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
-	Vbsg_tanh \
-	Vbsg_tanh___024root__DepSet_h29c2a46a__0 \
+	Vbsg_cordic_sine_cosine_hyperbolic \
+	Vbsg_cordic_sine_cosine_hyperbolic___024root__DepSet_h8a19f928__0 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
-	Vbsg_tanh__ConstPool_0 \
-	Vbsg_tanh___024root__Slow \
-	Vbsg_tanh___024root__DepSet_h29c2a46a__0__Slow \
+	Vbsg_cordic_sine_cosine_hyperbolic___024root__Slow \
+	Vbsg_cordic_sine_cosine_hyperbolic___024root__DepSet_h8a19f928__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization
 VM_SUPPORT_FAST += \
 
 # Generated support classes, non-fast-path, compile with low/medium optimization
 VM_SUPPORT_SLOW += \
-	Vbsg_tanh__Syms \
+	Vbsg_cordic_sine_cosine_hyperbolic__Syms \
 
 # Global classes, need linked once per executable, fast-path, compile with highest optimization
 VM_GLOBAL_FAST += \

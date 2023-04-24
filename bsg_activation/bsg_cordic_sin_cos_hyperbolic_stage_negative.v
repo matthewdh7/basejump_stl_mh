@@ -23,3 +23,4 @@ module bsg_cordic_sin_cos_hyperbolic_stage_negative #(parameter stage_p = 1, neg
     assign val_o = val_i;
 
     endmodule
+

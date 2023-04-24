@@ -1,16 +1,16 @@
 // Verilated -*- C++ -*-
 // DESCRIPTION: Verilator output: Symbol table implementation internals
 
-#include "Vbsg_tanh__Syms.h"
-#include "Vbsg_tanh.h"
-#include "Vbsg_tanh___024root.h"
+#include "Vbsg_cordic_sine_cosine_hyperbolic__Syms.h"
+#include "Vbsg_cordic_sine_cosine_hyperbolic.h"
+#include "Vbsg_cordic_sine_cosine_hyperbolic___024root.h"
 
 // FUNCTIONS
-Vbsg_tanh__Syms::~Vbsg_tanh__Syms()
+Vbsg_cordic_sine_cosine_hyperbolic__Syms::~Vbsg_cordic_sine_cosine_hyperbolic__Syms()
 {
 }
 
-Vbsg_tanh__Syms::Vbsg_tanh__Syms(VerilatedContext* contextp, const char* namep,Vbsg_tanh* modelp)
+Vbsg_cordic_sine_cosine_hyperbolic__Syms::Vbsg_cordic_sine_cosine_hyperbolic__Syms(VerilatedContext* contextp, const char* namep,Vbsg_cordic_sine_cosine_hyperbolic* modelp)
     : VerilatedSyms{contextp}
     // Setup internal state of the Syms class
     , __Vm_modelp{modelp}

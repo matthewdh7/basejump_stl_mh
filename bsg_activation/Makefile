@@ -5,27 +5,31 @@
 .ONESHELL: 
 .PHONY: clean
 
-FILE_DEL = $(VERI_DIR) CORDIC_tanh.vcd params_def.h bsg_tanh.v
+FILE_DEL = $(VERI_DIR) CORDIC_tanh.vcd params_def.h bsg_tanh.v bsg_cordic_sine_cosine_hyperbolic.v
 
 #Use 'make clean' to remove the trace and verilated files. Define FILE_DEL variable
 #with files folder to verilated files if not using default 'obj_dir' directory name. 
 #To have a different folder name for Verilated files, give the folder name to make 
 #with variable VERI_DIR;Use 'make run VERI_DIR=your_desired_name'
 
-GENERATED_VERILOG_FILE = bsg_tanh.v
+GENERATED_VERILOG_FILE_TAN = bsg_tanh.v
+GENERATED_VERILOG_FILE_SINCOS = bsg_cordic_sine_cosine_hyperbolic.v
 
 #To generate the default design with the parameters at line #53, please use 
 # 'make bsg_cordic_sine_cosine_hyperbolic.v'. 
 
-SRC_FILES = $(GENERATED_VERILOG_FILE) 
+SRC_FILES_TAN = $(GENERATED_VERILOG_FILE_TAN) 
+SRC_FILES_SINCOS = $(GENERATED_VERILOG_FILE_SINCOS)
 
-TEST_FILES = bsg_tanh_test2.cpp 
+TEST_FILES_TAN = bsg_tanh_test2.cpp 
+TEST_FILES_SINCOS = bsg_cordic_sine_cosine_hyperbolic_test.cpp
 
 VERI_DIR = obj_dir
 
 TRACE = 0
 
-VFLAGS = -Wall --cc --exe --top-module bsg_tanh --Mdir 
+VFLAGS_TAN = -Wall --cc --exe --top-module bsg_tanh --Mdir 
+VFLAGS_SINCOS = -Wall --cc --exe --top-module bsg_cordic_sine_cosine_hyperbolic --Mdir 
 
 VLINT_OFF = -Wno-UNUSED
 
@@ -37,33 +41,50 @@ VLINT_OFF = -Wno-UNUSED
 
 VERILATOR_PATH := $$HOME/verilator/install/bin/verilator
 
+sincos: $(VERI_DIR)/Vbsg_cordic_sine_cosine_hyperbolic
+	$(VERI_DIR)/Vbsg_cordic_sine_cosine_hyperbolic
+
+Vbsg_cordic_sine_cosine_hyperbolic.mk: $(SRC_FILES_SINCOS) $(TEST_FILES_SINCOS)
+ifeq ($(TRACE),1)
+		$(VERILATOR_PATH)  $(VFLAGS_SINCOS) $(VERI_DIR) --trace $(SRC_FILES_SINCOS) $(TEST_FILES_SINCOS) $(VLINT_OFF)
+else
+		$(VERILATOR_PATH) $(VFLAGS_SINCOS) $(VERI_DIR) $(SRC_FILES_SINCOS) $(TEST_FILES_SINCOS) $(VLINT_OFF)
+endif
+
+$(VERI_DIR)/Vbsg_cordic_sine_cosine_hyperbolic: Vbsg_cordic_sine_cosine_hyperbolic.mk
+		make -j -C $(VERI_DIR) -f Vbsg_cordic_sine_cosine_hyperbolic.mk Vbsg_cordic_sine_cosine_hyperbolic
+
+$(GENERATED_VERILOG_FILE_SINCOS):
+		echo -n > $(GENERATED_VERILOG_FILE_SINCOS)
+		python3 bsg_sine_cosine_hyperbolic_script.py 21 32 6 12 16 4 > $(GENERATED_VERILOG_FILE_SINCOS)
+
 run: $(VERI_DIR)/Vbsg_tanh
 	$(VERI_DIR)/Vbsg_tanh
 
-Vbsg_tanh.mk: $(SRC_FILES) $(TEST_FILES)
+Vbsg_tanh.mk: $(SRC_FILES_TAN) $(TEST_FILES_TAN)
 ifeq ($(TRACE),1)
-		$(VERILATOR_PATH)  $(VFLAGS) $(VERI_DIR) --trace $(SRC_FILES) $(TEST_FILES) $(VLINT_OFF)
+		$(VERILATOR_PATH)  $(VFLAGS_TAN) $(VERI_DIR) --trace $(SRC_FILES_TAN) $(TEST_FILES_TAN) $(VLINT_OFF)
 else
-		$(VERILATOR_PATH) $(VFLAGS) $(VERI_DIR) $(SRC_FILES) $(TEST_FILES) $(VLINT_OFF)
+		$(VERILATOR_PATH) $(VFLAGS_TAN) $(VERI_DIR) $(SRC_FILES_TAN) $(TEST_FILES_TAN) $(VLINT_OFF)
 endif
 
 $(VERI_DIR)/Vbsg_tanh: Vbsg_tanh.mk
 		make -j -C $(VERI_DIR) -f Vbsg_tanh.mk Vbsg_tanh
 
-$(GENERATED_VERILOG_FILE):
-		echo -n > $(GENERATED_VERILOG_FILE)
-		python3 bsg_tanh_script.py 21 32 6 12 16 4 > $(GENERATED_VERILOG_FILE)
+$(GENERATED_VERILOG_FILE_TAN):
+		echo -n > $(GENERATED_VERILOG_FILE_TAN)
+		python3 bsg_tanh_script.py 21 32 6 12 16 4 > $(GENERATED_VERILOG_FILE_TAN)
 
 clean:
 		rm -rf $(FILE_DEL)
 
 setup:
 	cd $$HOME/verilator
-	git checkout v4.106
-	mkdir install
+	git checkout v4.110
+# mkdir install
 	autoconf
 	./configure --prefix=$$PWD/install
-	make
+	make -j80
 	make install
 
 	export VERILATOR_ROOT=$$HOME/verilator

@@ -24,7 +24,7 @@
     );
 
     logic signed [ans_width_p-1:0] sinh, cosh, tanh_r, tanh_n;
-    logic sincosReady, sincosDone, tanReady, tanDone;
+    logic sincosReady, sincosDone, tanReady, tanDone, sincos_val_i, tan_val_i, bypass;
     
     
   
@@ -35,13 +35,17 @@
         state_n = state_r;
         case (state_r)
             eWAIT: begin
-                if (ready_o && val_i) state_n = eBUSY1;
+                if (ready_o && val_i) begin 
+                    if (bypass) state_n = eDONE;
+                    else        state_n = eBUSY1;
+                end
             end
             eBUSY1: begin
-                if (sincosDone && tanReady) state_n = eBUSY2;
+                if (bypass) state_n = eDONE;
+                else if (sincosDone && tanReady) state_n = eBUSY2;
             end
             eBUSY2: begin
-                if (tanDone) state_n = eDONE;
+                if (bypass || tanDone) state_n = eDONE;
             end
             eDONE: begin
                 if (ready_i) state_n = eWAIT;
@@ -54,13 +58,18 @@
         state_r <= state_n;
     end
 
+    /* bypass if tanh ~= 1 */
+    assign bypass = (ang_i > { {(ang_width_p-precision-2){1'b0}}, 5'b11111, {(precision-3){1'b0}} });
+    assign sincos_val_i = val_i && ~bypass;
+    assign tan_val_i = (sincosDone && (state_r == eBUSY1)) && ~bypass;
+
     /* sinh cosh module */
     bsg_cordic_sine_cosine_hyperbolic #(.neg_prec_p, .posi_prec_p, .extr_iter_p, .ans_width_p, .ang_width_p) sinhcosh
     (
      .clk_i
     ,.ang_i
     ,.ready_i   (tanReady && (state_r == eWAIT))
-    ,.val_i     
+    ,.val_i     (sincos_val_i)
     ,.sinh_o    (sinh)
     ,.cosh_o    (cosh)
     ,.ready_o   (sincosReady)
@@ -77,7 +86,7 @@
      .clk_i
     ,.reset_i       
 
-    ,.v_i           (sincosDone && (state_r == eBUSY1))
+    ,.v_i           (tan_val_i)
     ,.ready_and_o   (tanReady) 
 
     ,.dividend_i    (sinh_shifted)
@@ -93,15 +102,16 @@
     /* outbound signals */
     always_comb begin
         //if value of output exceeds 1 (decimal) then hard set to 1, otherwise keep normal output
-        if (tanh_shifted[SHFT_AMT] == 1)    tanh_n = {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}};
+        if (tanh_shifted[SHFT_AMT] == 1 || bypass)    tanh_n = {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}};
         else                                tanh_n = tanh_shifted[ans_width_p-1:0];
     end
+    //assign tanh_n = tanh_shifted[ans_width_p-1:0];
     assign val_o = state_r == eDONE;
     assign ready_o = (state_r == eWAIT) && (sincosReady);
 
     always_ff @(posedge clk_i) begin
-        if (tanDone)    tanh_r <= tanh_n;
-        else            tanh_r <= tanh_r;
+        if (tanDone || bypass)    tanh_r <= tanh_n;
+        else                      tanh_r <= tanh_r;
     end
 
     assign tanh_o = tanh_r;

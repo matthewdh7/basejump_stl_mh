@@ -4,32 +4,34 @@
 // Internal details; most calling programs do not need this header,
 // unless using verilator public meta comments.
 
-#ifndef _VBSG_TANH__SYMS_H_
-#define _VBSG_TANH__SYMS_H_  // guard
+#ifndef VERILATED_VBSG_TANH__SYMS_H_
+#define VERILATED_VBSG_TANH__SYMS_H_  // guard
 
 #include "verilated.h"
 
-// INCLUDE MODULE CLASSES
+// INCLUDE MODEL CLASS
+
 #include "Vbsg_tanh.h"
 
-// SYMS CLASS
-class Vbsg_tanh__Syms : public VerilatedSyms {
+// INCLUDE MODULE CLASSES
+#include "Vbsg_tanh___024root.h"
+
+// SYMS CLASS (contains all model state)
+class Vbsg_tanh__Syms final : public VerilatedSyms {
   public:
-    
-    // LOCAL STATE
-    const char* __Vm_namep;
-    bool __Vm_didInit;
-    
-    // SUBCELL STATE
-    Vbsg_tanh*                     TOPp;
-    
-    // CREATORS
-    Vbsg_tanh__Syms(Vbsg_tanh* topp, const char* namep);
-    ~Vbsg_tanh__Syms() = default;
-    
+    // INTERNAL STATE
+    Vbsg_tanh* const __Vm_modelp;
+    bool __Vm_didInit = false;
+
+    // MODULE INSTANCE STATE
+    Vbsg_tanh___024root            TOP;
+
+    // CONSTRUCTORS
+    Vbsg_tanh__Syms(VerilatedContext* contextp, const char* namep, Vbsg_tanh* modelp);
+    ~Vbsg_tanh__Syms();
+
     // METHODS
-    inline const char* name() { return __Vm_namep; }
-    
+    const char* name() { return TOP.name(); }
 } VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
 
 #endif  // guard

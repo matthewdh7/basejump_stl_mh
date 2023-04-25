@@ -8,7 +8,8 @@
 #include "verilated.h"
 
 class Vbsg_tanh__Syms;
-VL_MODULE(Vbsg_tanh___024root) {
+
+class Vbsg_tanh___024root final : public VerilatedModule {
   public:
 
     // DESIGN SPECIFIC STATE
@@ -22,6 +23,9 @@ VL_MODULE(Vbsg_tanh___024root) {
     CData/*1:0*/ bsg_tanh__DOT__state_n;
     CData/*0:0*/ bsg_tanh__DOT__sinhcosh__DOT__stall_pipe;
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__latch_signed_div_lo;
+    CData/*1:0*/ bsg_tanh__DOT__divider__DOT__opA_sel_lo;
+    CData/*2:0*/ bsg_tanh__DOT__divider__DOT__opB_sel_lo;
+    CData/*2:0*/ bsg_tanh__DOT__divider__DOT__opC_sel_lo;
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__opA_ld_lo;
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__opB_ld_lo;
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__opC_ld_lo;
@@ -35,7 +39,8 @@ VL_MODULE(Vbsg_tanh___024root) {
     CData/*5:0*/ bsg_tanh__DOT__divider__DOT__control__DOT__calc_cnt;
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__control__DOT__calc_up_li;
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__control__DOT__calc_done;
-    CData/*0:0*/ __Vclklast__TOP__clk_i;
+    CData/*0:0*/ __Vtrigrprev__TOP__clk_i;
+    CData/*0:0*/ __VactContinue;
     VL_IN(ang_i,20,0);
     VL_OUT(tanh_o,31,0);
     IData/*31:0*/ bsg_tanh__DOT__tanh_r;
@@ -47,18 +52,18 @@ VL_MODULE(Vbsg_tanh___024root) {
     VlWide<20>/*639:0*/ bsg_tanh__DOT__sinhcosh__DOT__y_ans;
     VlWide<14>/*419:0*/ bsg_tanh__DOT__sinhcosh__DOT__ang_ans;
     IData/*19:0*/ bsg_tanh__DOT__sinhcosh__DOT__val_ans;
-    QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opA_mux;
+    IData/*31:0*/ __VstlIterCount;
+    IData/*31:0*/ __VicoIterCount;
+    IData/*31:0*/ __VactIterCount;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__add1_out;
-    VlWide<4>/*97:0*/ bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i;
-    QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opB_mux;
-    QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opC_mux;
-    VlWide<5>/*146:0*/ bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i;
-    VlWide<4>/*97:0*/ bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opA_reg__DOT__data_r;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opB_reg__DOT__data_r;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r;
-    VlWide<5>/*146:0*/ bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxB__DOT__data_masked;
-    VlWide<5>/*146:0*/ bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked;
+    QData/*48:0*/ bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT____VdfgTmp_ha3a8a75d__0;
+    VlTriggerVec<1> __VstlTriggered;
+    VlTriggerVec<1> __VicoTriggered;
+    VlTriggerVec<1> __VactTriggered;
+    VlTriggerVec<1> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vbsg_tanh__Syms* const vlSymsp;

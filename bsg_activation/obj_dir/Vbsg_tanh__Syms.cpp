@@ -10,7 +10,7 @@ Vbsg_tanh__Syms::~Vbsg_tanh__Syms()
 {
 }
 
-Vbsg_tanh__Syms::Vbsg_tanh__Syms(VerilatedContext* contextp, const char* namep,Vbsg_tanh* modelp)
+Vbsg_tanh__Syms::Vbsg_tanh__Syms(VerilatedContext* contextp, const char* namep, Vbsg_tanh* modelp)
     : VerilatedSyms{contextp}
     // Setup internal state of the Syms class
     , __Vm_modelp{modelp}

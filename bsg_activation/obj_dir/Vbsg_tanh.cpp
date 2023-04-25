@@ -8,7 +8,8 @@
 // Constructors
 
 Vbsg_tanh::Vbsg_tanh(VerilatedContext* _vcontextp__, const char* _vcname__)
-    : vlSymsp{new Vbsg_tanh__Syms(_vcontextp__, _vcname__, this)}
+    : VerilatedModel{*_vcontextp__}
+    , vlSymsp{new Vbsg_tanh__Syms(contextp(), _vcname__, this)}
     , clk_i{vlSymsp->TOP.clk_i}
     , ready_i{vlSymsp->TOP.ready_i}
     , val_i{vlSymsp->TOP.val_i}
@@ -19,10 +20,12 @@ Vbsg_tanh::Vbsg_tanh(VerilatedContext* _vcontextp__, const char* _vcname__)
     , tanh_o{vlSymsp->TOP.tanh_o}
     , rootp{&(vlSymsp->TOP)}
 {
+    // Register model with the context
+    contextp()->addModel(this);
 }
 
 Vbsg_tanh::Vbsg_tanh(const char* _vcname__)
-    : Vbsg_tanh(nullptr, _vcname__)
+    : Vbsg_tanh(Verilated::threadContextp(), _vcname__)
 {
 }
 
@@ -34,26 +37,15 @@ Vbsg_tanh::~Vbsg_tanh() {
 }
 
 //============================================================
-// Evaluation loop
+// Evaluation function
 
-void Vbsg_tanh___024root___eval_initial(Vbsg_tanh___024root* vlSelf);
-void Vbsg_tanh___024root___eval_settle(Vbsg_tanh___024root* vlSelf);
-void Vbsg_tanh___024root___eval(Vbsg_tanh___024root* vlSelf);
 #ifdef VL_DEBUG
 void Vbsg_tanh___024root___eval_debug_assertions(Vbsg_tanh___024root* vlSelf);
 #endif  // VL_DEBUG
-void Vbsg_tanh___024root___final(Vbsg_tanh___024root* vlSelf);
-
-static void _eval_initial_loop(Vbsg_tanh__Syms* __restrict vlSymsp) {
-    vlSymsp->__Vm_didInit = true;
-    Vbsg_tanh___024root___eval_initial(&(vlSymsp->TOP));
-    // Evaluate till stable
-    do {
-        VL_DEBUG_IF(VL_DBG_MSGF("+ Initial loop\n"););
-        Vbsg_tanh___024root___eval_settle(&(vlSymsp->TOP));
-        Vbsg_tanh___024root___eval(&(vlSymsp->TOP));
-    } while (0);
-}
+void Vbsg_tanh___024root___eval_static(Vbsg_tanh___024root* vlSelf);
+void Vbsg_tanh___024root___eval_initial(Vbsg_tanh___024root* vlSelf);
+void Vbsg_tanh___024root___eval_settle(Vbsg_tanh___024root* vlSelf);
+void Vbsg_tanh___024root___eval(Vbsg_tanh___024root* vlSelf);
 
 void Vbsg_tanh::eval_step() {
     VL_DEBUG_IF(VL_DBG_MSGF("+++++TOP Evaluate Vbsg_tanh::eval_step\n"); );
@@ -61,22 +53,29 @@ void Vbsg_tanh::eval_step() {
     // Debug assertions
     Vbsg_tanh___024root___eval_debug_assertions(&(vlSymsp->TOP));
 #endif  // VL_DEBUG
-    // Initialize
-    if (VL_UNLIKELY(!vlSymsp->__Vm_didInit)) _eval_initial_loop(vlSymsp);
-    // Evaluate till stable
-    do {
-        VL_DEBUG_IF(VL_DBG_MSGF("+ Clock loop\n"););
-        Vbsg_tanh___024root___eval(&(vlSymsp->TOP));
-    } while (0);
+    if (VL_UNLIKELY(!vlSymsp->__Vm_didInit)) {
+        vlSymsp->__Vm_didInit = true;
+        VL_DEBUG_IF(VL_DBG_MSGF("+ Initial\n"););
+        Vbsg_tanh___024root___eval_static(&(vlSymsp->TOP));
+        Vbsg_tanh___024root___eval_initial(&(vlSymsp->TOP));
+        Vbsg_tanh___024root___eval_settle(&(vlSymsp->TOP));
+    }
+    VL_DEBUG_IF(VL_DBG_MSGF("+ Eval\n"););
+    Vbsg_tanh___024root___eval(&(vlSymsp->TOP));
     // Evaluate cleanup
 }
 
 //============================================================
-// Utilities
+// Events and timing
+bool Vbsg_tanh::eventsPending() { return false; }
 
-VerilatedContext* Vbsg_tanh::contextp() const {
-    return vlSymsp->_vm_contextp__;
+uint64_t Vbsg_tanh::nextTimeSlot() {
+    VL_FATAL_MT(__FILE__, __LINE__, "", "%Error: No delays in the design");
+    return 0;
 }
+
+//============================================================
+// Utilities
 
 const char* Vbsg_tanh::name() const {
     return vlSymsp->name();
@@ -85,6 +84,15 @@ const char* Vbsg_tanh::name() const {
 //============================================================
 // Invoke final blocks
 
+void Vbsg_tanh___024root___eval_final(Vbsg_tanh___024root* vlSelf);
+
 VL_ATTR_COLD void Vbsg_tanh::final() {
-    Vbsg_tanh___024root___final(&(vlSymsp->TOP));
+    Vbsg_tanh___024root___eval_final(&(vlSymsp->TOP));
 }
+
+//============================================================
+// Implementations of abstract methods from VerilatedModel
+
+const char* Vbsg_tanh::hierName() const { return vlSymsp->name(); }
+const char* Vbsg_tanh::modelName() const { return "Vbsg_tanh"; }
+unsigned Vbsg_tanh::threads() const { return 1; }

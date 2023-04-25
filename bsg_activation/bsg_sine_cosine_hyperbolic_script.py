@@ -2,6 +2,7 @@ import sys, math
 
 def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extriter):
     print("""
+    /* verilator lint_off MULTIDRIVEN */
     module bsg_cordic_sine_cosine_hyperbolic #(parameter neg_prec_p=%(n)d, posi_prec_p=%(p)d, extr_iter_p=1, ans_width_p = %(s)d, ang_width_p = %(g)d)
     (
     input clk_i

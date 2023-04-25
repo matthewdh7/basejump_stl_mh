@@ -59,7 +59,7 @@ unsigned long int currquant = startquant;
 // at least 8-12 bits for decimal point to get above rated results.
 
 // unsigned long int numsamples = (pow(2,anglen-1)-1);
-unsigned long int numsamples = 15;
+unsigned long int numsamples = 1000;
 
 // While testing please be very careful of the number of samples. Sometimes the
 // anglen can make the sample_width = 0 which will definitely result in unnecessary
@@ -83,7 +83,7 @@ int main(int argc, char **argv, char **env)
 
 	int samp_len = 0;
 	samples = new unsigned long int [numsamples];
-	result_tanh = new unsigned long int [0];
+	result_tanh = new unsigned long int [numsamples];
 	int valid_in = 1;
 	int ready_in = 1;
 
@@ -113,10 +113,10 @@ int main(int argc, char **argv, char **env)
 			} else if (j > 10) {
 				top->val_i = 0;
 			}
-			while(main_time<10){
+			for (int i=0; i<10; i++) {
 
 				#if VM_TRACE
-				tfp->dump (main_time+j*10+i*1000);
+				tfp->dump (main_time);
 				#endif
 
 				if((main_time%10)==0){			
@@ -127,11 +127,8 @@ int main(int argc, char **argv, char **env)
 					top->clk_i = 0;
 				}
 				top->eval();
-				
 				main_time++;
-				
 			}
-			main_time = 0;
 		}
 	}	
 

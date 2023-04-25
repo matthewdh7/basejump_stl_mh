@@ -79,9 +79,9 @@ clean:
 		rm -rf $(FILE_DEL)
 
 setup:
-	cd $$HOME/verilator
 	source /opt/rh/devtoolset-11/enable
-	git checkout v5.002
+	cd $$HOME/verilator
+	git checkout v4.228
 	autoconf
 	./configure --prefix=$$PWD/install
 	make -j80

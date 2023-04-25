@@ -7,8 +7,6 @@
 ### Switches...
 # C11 constructs required?  0/1 (always on now)
 VM_C11 = 1
-# Timing enabled?  0/1
-VM_TIMING = 0
 # Coverage output mode?  0/1 (from --coverage)
 VM_COVERAGE = 0
 # Parallel builds?  0/1 (from --output-split)
@@ -26,13 +24,12 @@ VM_TRACE_FST = 0
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
 	Vbsg_tanh \
-	Vbsg_tanh___024root__DepSet_h63e3570c__0 \
 	Vbsg_tanh___024root__DepSet_h29c2a46a__0 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
+	Vbsg_tanh__ConstPool_0 \
 	Vbsg_tanh___024root__Slow \
-	Vbsg_tanh___024root__DepSet_h63e3570c__0__Slow \
 	Vbsg_tanh___024root__DepSet_h29c2a46a__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization

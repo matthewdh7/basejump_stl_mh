@@ -28,7 +28,7 @@ VERI_DIR = obj_dir
 
 TRACE = 0
 # need to add new flags to beginning of list, not end (after --Mdir comes the VERI_DIR path)
-VFLAGS_TAN = --gdb -Wall --cc --exe --top-module bsg_tanh --Mdir
+VFLAGS_TAN = -Wall --cc --exe --top-module bsg_tanh --Mdir
 VFLAGS_SINCOS = -Wall --cc --exe --top-module bsg_cordic_sine_cosine_hyperbolic --Mdir 
 
 VLINT_OFF = -Wno-UNUSED
@@ -91,4 +91,4 @@ setup:
 	export PATH=$$PATH:$$VERILATOR_ROOT/bin
 # export VERILATOR_ROOT=$HOME/verilator
 # export PATH=$PATH:$VERILATOR_ROOT/bin
-# $HOME/verilator/install/bin/verilator -Wall --cc --exe bsg_tanh_test2.cpp --top-module bsg_tanh --Mdir obj_dir bsg_tanh.v   -Wno-UNUSED
+# $HOME/verilator/install/bin/verilator -Wall --cc --build bsg_tanh_test2.cpp --top-module bsg_tanh --Mdir obj_dir bsg_tanh.v   -Wno-UNUSED

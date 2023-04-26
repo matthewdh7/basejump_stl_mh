@@ -28,10 +28,12 @@ class Vbsg_tanh VL_NOT_FINAL : public VerilatedModel {
     VL_IN8(&ready_i,0,0);
     VL_IN8(&val_i,0,0);
     VL_IN8(&reset_i,0,0);
+    VL_IN8(&tanh_sel_i,0,0);
+    VL_IN8(&neg_sel_i,0,0);
     VL_OUT8(&ready_o,0,0);
     VL_OUT8(&val_o,0,0);
     VL_IN(&ang_i,20,0);
-    VL_OUT(&tanh_o,31,0);
+    VL_OUT(&data_o,31,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.

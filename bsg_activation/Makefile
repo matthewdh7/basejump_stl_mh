@@ -5,7 +5,7 @@
 .ONESHELL: 
 .PHONY: clean
 
-FILE_DEL = $(VERI_DIR) CORDIC_tanh.vcd params_def.h bsg_tanh.v bsg_cordic_sine_cosine_hyperbolic.v
+FILE_DEL = $(VERI_DIR) CORDIC_tanh.vcd params_def.h bsg_tanh.v bsg_cordic_sine_cosine_hyperbolic.v bsg_tanh_OLD.v
 
 #Use 'make clean' to remove the trace and verilated files. Define FILE_DEL variable
 #with files folder to verilated files if not using default 'obj_dir' directory name. 
@@ -21,7 +21,7 @@ GENERATED_VERILOG_FILE_SINCOS = bsg_cordic_sine_cosine_hyperbolic.v
 SRC_FILES_TAN = $(GENERATED_VERILOG_FILE_TAN) 
 SRC_FILES_SINCOS = $(GENERATED_VERILOG_FILE_SINCOS)
 
-TEST_FILES_TAN = bsg_tanh_test2.cpp 
+TEST_FILES_TAN = bsg_tanh_test.cpp 
 TEST_FILES_SINCOS = bsg_cordic_sine_cosine_hyperbolic_test.cpp
 
 VERI_DIR = obj_dir
@@ -86,6 +86,7 @@ setup:
 	./configure --prefix=$$PWD/install
 	make -j80
 	make install
+	source /opt/rh/devtoolset-11/enable
 
 	export VERILATOR_ROOT=$$HOME/verilator
 	export PATH=$$PATH:$$VERILATOR_ROOT/bin

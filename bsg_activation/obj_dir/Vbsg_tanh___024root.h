@@ -17,8 +17,12 @@ class Vbsg_tanh___024root final : public VerilatedModule {
     VL_IN8(ready_i,0,0);
     VL_IN8(val_i,0,0);
     VL_IN8(reset_i,0,0);
+    VL_IN8(tanh_sel_i,0,0);
+    VL_IN8(neg_sel_i,0,0);
     VL_OUT8(ready_o,0,0);
     VL_OUT8(val_o,0,0);
+    CData/*0:0*/ bsg_tanh__DOT__bypass;
+    CData/*0:0*/ bsg_tanh__DOT__load_ang;
     CData/*1:0*/ bsg_tanh__DOT__state_r;
     CData/*1:0*/ bsg_tanh__DOT__state_n;
     CData/*0:0*/ bsg_tanh__DOT__sinhcosh__DOT__stall_pipe;
@@ -38,8 +42,11 @@ class Vbsg_tanh___024root final : public VerilatedModule {
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__control__DOT__calc_done;
     CData/*0:0*/ __Vclklast__TOP__clk_i;
     VL_IN(ang_i,20,0);
-    VL_OUT(tanh_o,31,0);
-    IData/*31:0*/ bsg_tanh__DOT__tanh_r;
+    VL_OUT(data_o,31,0);
+    IData/*20:0*/ bsg_tanh__DOT__ang_r;
+    IData/*31:0*/ bsg_tanh__DOT__negExp;
+    IData/*31:0*/ bsg_tanh__DOT__data_r;
+    IData/*31:0*/ bsg_tanh__DOT__data_n;
     VlWide<21>/*671:0*/ bsg_tanh__DOT__sinhcosh__DOT__x;
     VlWide<21>/*671:0*/ bsg_tanh__DOT__sinhcosh__DOT__y;
     VlWide<14>/*440:0*/ bsg_tanh__DOT__sinhcosh__DOT__ang;
@@ -50,10 +57,8 @@ class Vbsg_tanh___024root final : public VerilatedModule {
     IData/*19:0*/ bsg_tanh__DOT__sinhcosh__DOT__val_ans;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opA_mux;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__add1_out;
-    VlWide<4>/*97:0*/ bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opB_mux;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opC_mux;
-    VlWide<5>/*146:0*/ bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i;
     VlWide<4>/*97:0*/ bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opA_reg__DOT__data_r;
     QData/*48:0*/ bsg_tanh__DOT__divider__DOT__opB_reg__DOT__data_r;

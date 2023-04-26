@@ -46,7 +46,7 @@ double maxquant = theta_final*pow(2,precision);
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
-unsigned long int startquant = 1000;
+unsigned long int startquant = 10000;
 unsigned long int currquant = startquant;
 
 // The starting quantity is a very important parameter of testing. Due to truncation effect
@@ -59,7 +59,7 @@ unsigned long int currquant = startquant;
 // at least 8-12 bits for decimal point to get above rated results.
 
 // unsigned long int numsamples = (pow(2,anglen-1)-1);
-unsigned long int numsamples = 10;
+unsigned long int numsamples = 100;
 
 // While testing please be very careful of the number of samples. Sometimes the
 // anglen can make the sample_width = 0 which will definitely result in unnecessary
@@ -69,7 +69,7 @@ unsigned long int sample_width = round((maxquant-startquant)/numsamples);
 																																	
 unsigned long int *samples;													
 
-unsigned long int *result_tanh;
+unsigned long int *result;
 
 int main(int argc, char **argv, char **env)
 {
@@ -83,8 +83,7 @@ int main(int argc, char **argv, char **env)
 
 	int samp_len = 0;
 	samples = new unsigned long int [numsamples];
-	result_tanh = new unsigned long int [numsamples];
-	int valid_in = 1;
+	result = new unsigned long int [numsamples];
 	int ready_in = 1;
 
 	#if VM_TRACE
@@ -95,22 +94,22 @@ int main(int argc, char **argv, char **env)
 	for(int i=0;i<numsamples;i++){
 		for(int j=0; j<100; j++) {
 			if (top->val_o) {
-				result_tanh[i] = top->tanh_o;
+				result[i] = top->tanh_o;
 			}
-			if(j==0) {
+			if(j==1) {
 					top->ang_i = currquant;
 					samples[i] = currquant;
 					currquant += sample_width;
 					samp_len++;
 
-					top->val_i = valid_in;
+					top->val_i = 1;
 					top->ready_i = ready_in;
 
 					int val_i = top->val_i;
 					int val_o = top->val_o;
 					int ready_i = top->ready_i;
 					int ready_o = top->ready_o;
-			} else if (j > 10) {
+			} else {
 				top->val_i = 0;
 			}
 			for (int i=0; i<10; i++) {
@@ -144,7 +143,7 @@ int main(int argc, char **argv, char **env)
 
         double ideal_value_tanh = tanh(samp);
 
-		double obser_value_tanh = result_tanh[i]/pow(2,precision);
+		double obser_value_tanh = result[i]/pow(2,precision);
 
         float err_tanh = (ideal_value_tanh - obser_value_tanh)/ideal_value_tanh;
 

@@ -14,10 +14,12 @@ Vbsg_tanh::Vbsg_tanh(VerilatedContext* _vcontextp__, const char* _vcname__)
     , ready_i{vlSymsp->TOP.ready_i}
     , val_i{vlSymsp->TOP.val_i}
     , reset_i{vlSymsp->TOP.reset_i}
+    , tanh_sel_i{vlSymsp->TOP.tanh_sel_i}
+    , neg_sel_i{vlSymsp->TOP.neg_sel_i}
     , ready_o{vlSymsp->TOP.ready_o}
     , val_o{vlSymsp->TOP.val_o}
     , ang_i{vlSymsp->TOP.ang_i}
-    , tanh_o{vlSymsp->TOP.tanh_o}
+    , data_o{vlSymsp->TOP.data_o}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

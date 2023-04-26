@@ -6,15 +6,18 @@
 
 #include "Vbsg_tanh___024root.h"
 
-extern const VlUnpacked<CData/*1:0*/, 512> Vbsg_tanh__ConstPool__TABLE_h680c41c3_0;
+extern const VlUnpacked<CData/*1:0*/, 512> Vbsg_tanh__ConstPool__TABLE_h2e99d2d8_0;
 
 VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vbsg_tanh__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vbsg_tanh___024root___settle__TOP__0\n"); );
     // Init
-    CData/*0:0*/ bsg_tanh__DOT__tan_val_i;
+    QData/*47:0*/ bsg_tanh__DOT__dividend_li;
+    QData/*47:0*/ bsg_tanh__DOT__divisor_li;
+    CData/*0:0*/ bsg_tanh__DOT__divider_v_i;
     CData/*1:0*/ bsg_tanh__DOT__divider__DOT__opA_sel_lo;
+    VlWide<4>/*97:0*/ bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i;
     CData/*2:0*/ bsg_tanh__DOT__divider__DOT__opB_sel_lo;
     CData/*2:0*/ bsg_tanh__DOT__divider__DOT__opC_sel_lo;
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__opA_inv_lo;
@@ -23,10 +26,10 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__opB_clr_lo;
     CData/*0:0*/ bsg_tanh__DOT__divider__DOT__adder1_cin_lo;
     VlWide<5>/*146:0*/ bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxB__data_i;
+    VlWide<5>/*146:0*/ bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i;
     SData/*8:0*/ __Vtableidx1;
     // Body
-    vlSelf->val_o = (3U == (IData)(vlSelf->bsg_tanh__DOT__state_r));
-    vlSelf->tanh_o = vlSelf->bsg_tanh__DOT__tanh_r;
+    vlSelf->data_o = vlSelf->bsg_tanh__DOT__data_r;
     vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__calc_done 
         = (0x30U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__calc_cnt));
     vlSelf->bsg_tanh__DOT__sinhcosh__DOT__val_ans = 
@@ -871,19 +874,38 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
             = (vlSelf->bsg_tanh__DOT__sinhcosh__DOT__x[0x13U] 
                + VL_SHIFTRS_III(32,32,32, vlSelf->bsg_tanh__DOT__sinhcosh__DOT__y[0x13U], 0xcU));
     }
-    bsg_tanh__DOT__tan_val_i = (((vlSelf->bsg_tanh__DOT__sinhcosh__DOT__val 
-                                  >> 0x14U) & (1U == (IData)(vlSelf->bsg_tanh__DOT__state_r))) 
-                                & (0x3e000U >= vlSelf->ang_i));
+    vlSelf->bsg_tanh__DOT__negExp = (vlSelf->bsg_tanh__DOT__sinhcosh__DOT__x[0x14U] 
+                                     - vlSelf->bsg_tanh__DOT__sinhcosh__DOT__y[0x14U]);
+    if (vlSelf->tanh_sel_i) {
+        bsg_tanh__DOT__dividend_li = (0xffffffffffffULL 
+                                      & ((QData)((IData)(
+                                                         vlSelf->bsg_tanh__DOT__sinhcosh__DOT__y[0x14U])) 
+                                         << 0x10U));
+        bsg_tanh__DOT__divisor_li = (QData)((IData)(
+                                                    vlSelf->bsg_tanh__DOT__sinhcosh__DOT__x[0x14U]));
+    } else {
+        bsg_tanh__DOT__dividend_li = 0x100000000ULL;
+        bsg_tanh__DOT__divisor_li = (((QData)((IData)(
+                                                      (0xffffU 
+                                                       & ((IData)(1U) 
+                                                          + 
+                                                          (vlSelf->bsg_tanh__DOT__negExp 
+                                                           >> 0x10U))))) 
+                                      << 0x10U) | (QData)((IData)(
+                                                                  (0xffffU 
+                                                                   & vlSelf->bsg_tanh__DOT__negExp))));
+    }
+    vlSelf->val_o = (3U == (IData)(vlSelf->bsg_tanh__DOT__state_r));
     vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__neg_ld = 0U;
     vlSelf->bsg_tanh__DOT__divider__DOT__opB_ld_lo = 0U;
     vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__calc_up_li 
         = ((4U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
            & (0x30U > (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__calc_cnt)));
     vlSelf->bsg_tanh__DOT__sinhcosh__DOT__stall_pipe 
-        = (IData)(((vlSelf->bsg_tanh__DOT__sinhcosh__DOT__val 
-                    >> 0x14U) & (~ ((0U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-                                    & (0U == (IData)(vlSelf->bsg_tanh__DOT__state_r))))));
+        = ((vlSelf->bsg_tanh__DOT__sinhcosh__DOT__val 
+            >> 0x14U) & (0U != (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)));
     bsg_tanh__DOT__divider__DOT__opB_sel_lo = 1U;
+    vlSelf->bsg_tanh__DOT__bypass = 0U;
     bsg_tanh__DOT__divider__DOT__opA_clr_lo = 1U;
     bsg_tanh__DOT__divider__DOT__opB_clr_lo = 1U;
     bsg_tanh__DOT__divider__DOT__opA_inv_lo = (1U & 
@@ -891,13 +913,25 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
     bsg_tanh__DOT__divider__DOT__opB_inv_lo = 0U;
     bsg_tanh__DOT__divider__DOT__adder1_cin_lo = (1U 
                                                   & (~ (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__add1_neg_last_r)));
-    vlSelf->bsg_tanh__DOT__divider__DOT__latch_signed_div_lo = 0U;
-    vlSelf->bsg_tanh__DOT__divider__DOT__opC_ld_lo = 0U;
-    vlSelf->bsg_tanh__DOT__divider__DOT__opA_ld_lo = 0U;
-    bsg_tanh__DOT__divider__DOT__opA_sel_lo = 0U;
-    bsg_tanh__DOT__divider__DOT__opC_sel_lo = 1U;
-    vlSelf->ready_o = ((0U == (IData)(vlSelf->bsg_tanh__DOT__state_r)) 
-                       & (~ (IData)(vlSelf->bsg_tanh__DOT__sinhcosh__DOT__stall_pipe)));
+    if ((0U == (IData)(vlSelf->bsg_tanh__DOT__state_r))) {
+        vlSelf->ready_o = (1U & (~ (IData)(vlSelf->bsg_tanh__DOT__sinhcosh__DOT__stall_pipe)));
+        if ((vlSelf->ang_i > ((IData)(vlSelf->tanh_sel_i)
+                               ? 0x40000U : 0x70000U))) {
+            vlSelf->bsg_tanh__DOT__bypass = 1U;
+        }
+    } else {
+        vlSelf->ready_o = 0U;
+        if ((1U != (IData)(vlSelf->bsg_tanh__DOT__state_r))) {
+            vlSelf->bsg_tanh__DOT__bypass = 0U;
+        }
+    }
+    vlSelf->bsg_tanh__DOT__data_n = (((1U <= (IData)(
+                                                     (vlSelf->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r 
+                                                      >> 0x10U))) 
+                                      | (IData)(vlSelf->bsg_tanh__DOT__bypass))
+                                      ? 0x10000U : (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r));
+    bsg_tanh__DOT__divider_v_i = ((2U == (IData)(vlSelf->bsg_tanh__DOT__state_r)) 
+                                  & (~ (IData)(vlSelf->bsg_tanh__DOT__bypass)));
     if (((((((((0U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
                | (1U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
               | (2U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
@@ -988,21 +1022,36 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
                                     ^ (- (QData)((IData)(bsg_tanh__DOT__divider__DOT__opB_inv_lo)))) 
                                    & (- (QData)((IData)(bsg_tanh__DOT__divider__DOT__opB_clr_lo))))) 
                                + (QData)((IData)(bsg_tanh__DOT__divider__DOT__adder1_cin_lo))));
-    __Vtableidx1 = (((IData)(vlSelf->val_i) << 8U) 
-                    | (((IData)(vlSelf->ready_o) << 7U) 
-                       | (((0U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-                           << 6U) | ((0x20U & (vlSelf->bsg_tanh__DOT__sinhcosh__DOT__val 
-                                               >> 0xfU)) 
-                                     | (((8U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
-                                         << 4U) | (
-                                                   ((0x3e000U 
-                                                     < vlSelf->ang_i) 
-                                                    << 3U) 
-                                                   | (((IData)(vlSelf->ready_i) 
-                                                       << 2U) 
-                                                      | (IData)(vlSelf->bsg_tanh__DOT__state_r))))))));
-    vlSelf->bsg_tanh__DOT__state_n = Vbsg_tanh__ConstPool__TABLE_h680c41c3_0
+    vlSelf->bsg_tanh__DOT__load_ang = 0U;
+    if ((0U == (IData)(vlSelf->bsg_tanh__DOT__state_r))) {
+        if (((IData)(vlSelf->val_i) & (IData)(vlSelf->ready_o))) {
+            vlSelf->bsg_tanh__DOT__load_ang = 1U;
+        }
+    } else if ((1U != (IData)(vlSelf->bsg_tanh__DOT__state_r))) {
+        vlSelf->bsg_tanh__DOT__load_ang = 0U;
+    }
+    __Vtableidx1 = (((IData)(vlSelf->bsg_tanh__DOT__bypass) 
+                     << 8U) | (((IData)(vlSelf->val_i) 
+                                << 7U) | (((IData)(vlSelf->ready_o) 
+                                           << 6U) | 
+                                          (((0U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+                                            << 5U) 
+                                           | ((0x10U 
+                                               & (vlSelf->bsg_tanh__DOT__sinhcosh__DOT__val 
+                                                  >> 0x10U)) 
+                                              | (((8U 
+                                                   == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
+                                                  << 3U) 
+                                                 | (((IData)(vlSelf->ready_i) 
+                                                     << 2U) 
+                                                    | (IData)(vlSelf->bsg_tanh__DOT__state_r))))))));
+    vlSelf->bsg_tanh__DOT__state_n = Vbsg_tanh__ConstPool__TABLE_h2e99d2d8_0
         [__Vtableidx1];
+    vlSelf->bsg_tanh__DOT__divider__DOT__latch_signed_div_lo = 0U;
+    vlSelf->bsg_tanh__DOT__divider__DOT__opC_ld_lo = 0U;
+    vlSelf->bsg_tanh__DOT__divider__DOT__opA_ld_lo = 0U;
+    bsg_tanh__DOT__divider__DOT__opA_sel_lo = 0U;
+    bsg_tanh__DOT__divider__DOT__opC_sel_lo = 1U;
     vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__next_state = 0U;
     if (((((((((0U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)) 
                | (1U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
@@ -1013,7 +1062,7 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
           | (6U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state))) 
          | (7U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state)))) {
         if ((0U == (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__state))) {
-            if (bsg_tanh__DOT__tan_val_i) {
+            if (bsg_tanh__DOT__divider_v_i) {
                 vlSelf->bsg_tanh__DOT__divider__DOT__latch_signed_div_lo = 1U;
                 vlSelf->bsg_tanh__DOT__divider__DOT__opC_ld_lo = 1U;
                 vlSelf->bsg_tanh__DOT__divider__DOT__opA_ld_lo = 1U;
@@ -1096,21 +1145,20 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
         vlSelf->bsg_tanh__DOT__divider__DOT__control__DOT__next_state 
             = ((IData)(vlSelf->ready_i) ? 0U : 8U);
     }
-    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[0U] 
+    bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[0U] 
         = (IData)(vlSelf->bsg_tanh__DOT__divider__DOT__add1_out);
-    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U] 
-        = (((IData)((QData)((IData)(vlSelf->bsg_tanh__DOT__sinhcosh__DOT__x[0x14U]))) 
-            << 0x11U) | (IData)((vlSelf->bsg_tanh__DOT__divider__DOT__add1_out 
-                                 >> 0x20U)));
-    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U] 
-        = (((IData)((QData)((IData)(vlSelf->bsg_tanh__DOT__sinhcosh__DOT__x[0x14U]))) 
-            >> 0xfU) | ((IData)(((QData)((IData)(vlSelf->bsg_tanh__DOT__sinhcosh__DOT__x[0x14U])) 
-                                 >> 0x20U)) << 0x11U));
-    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U] 
-        = ((2U & ((IData)(((QData)((IData)(vlSelf->bsg_tanh__DOT__sinhcosh__DOT__x[0x14U])) 
+    bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U] 
+        = (((IData)(bsg_tanh__DOT__divisor_li) << 0x11U) 
+           | (IData)((vlSelf->bsg_tanh__DOT__divider__DOT__add1_out 
+                      >> 0x20U)));
+    bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U] 
+        = (((IData)(bsg_tanh__DOT__divisor_li) >> 0xfU) 
+           | ((IData)((bsg_tanh__DOT__divisor_li >> 0x20U)) 
+              << 0x11U));
+    bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U] 
+        = ((2U & ((IData)((bsg_tanh__DOT__divisor_li 
                            >> 0x2fU)) << 1U)) | ((IData)(
-                                                         ((QData)((IData)(
-                                                                          vlSelf->bsg_tanh__DOT__sinhcosh__DOT__x[0x14U])) 
+                                                         (bsg_tanh__DOT__divisor_li 
                                                           >> 0x20U)) 
                                                  >> 0xfU));
     bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxB__data_i[0U] 
@@ -1150,14 +1198,14 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
                                                              (vlSelf->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r 
                                                               >> 0x20U)) 
                                                      << 2U)));
-    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[0U] 
+    bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[0U] 
         = (IData)(((0x1fffffffffffeULL & (vlSelf->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r 
                                           << 1U)) | (QData)((IData)(
                                                                     (1U 
                                                                      & (~ (IData)(
                                                                                 (vlSelf->bsg_tanh__DOT__divider__DOT__add1_out 
                                                                                 >> 0x30U))))))));
-    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U] 
+    bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U] 
         = (((IData)(vlSelf->bsg_tanh__DOT__divider__DOT__add1_out) 
             << 0x11U) | (IData)((((0x1fffffffffffeULL 
                                    & (vlSelf->bsg_tanh__DOT__divider__DOT__opC_reg__DOT__data_r 
@@ -1167,63 +1215,42 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
                                                                               (vlSelf->bsg_tanh__DOT__divider__DOT__add1_out 
                                                                                >> 0x30U))))))) 
                                  >> 0x20U)));
-    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U] 
+    bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U] 
         = (((IData)(vlSelf->bsg_tanh__DOT__divider__DOT__add1_out) 
             >> 0xfU) | ((IData)((vlSelf->bsg_tanh__DOT__divider__DOT__add1_out 
                                  >> 0x20U)) << 0x11U));
-    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U] 
-        = (((0x1fffcU & ((IData)((0xffffffffffffULL 
-                                  & ((QData)((IData)(
-                                                     vlSelf->bsg_tanh__DOT__sinhcosh__DOT__y[0x14U])) 
-                                     << 0x10U))) << 2U)) 
-            | ((IData)((vlSelf->bsg_tanh__DOT__divider__DOT__add1_out 
-                        >> 0x20U)) >> 0xfU)) | (0xfffe0000U 
-                                                & ((IData)(
-                                                           (0xffffffffffffULL 
-                                                            & ((QData)((IData)(
-                                                                               vlSelf->bsg_tanh__DOT__sinhcosh__DOT__y[0x14U])) 
-                                                               << 0x10U))) 
-                                                   << 2U)));
-    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U] 
-        = ((((IData)((0xffffffffffffULL & ((QData)((IData)(
-                                                           vlSelf->bsg_tanh__DOT__sinhcosh__DOT__y[0x14U])) 
-                                           << 0x10U))) 
-             >> 0x1eU) | (0x1fffcU & ((IData)(((0xffffffffffffULL 
-                                                & ((QData)((IData)(
-                                                                   vlSelf->bsg_tanh__DOT__sinhcosh__DOT__y[0x14U])) 
-                                                   << 0x10U)) 
-                                               >> 0x20U)) 
-                                      << 2U))) | ((0x40000U 
-                                                   & ((IData)(
-                                                              (1ULL 
-                                                               & ((QData)((IData)(
-                                                                                vlSelf->bsg_tanh__DOT__sinhcosh__DOT__y[0x14U])) 
-                                                                  >> 0x1fU))) 
-                                                      << 0x12U)) 
-                                                  | (0xfffe0000U 
-                                                     & ((IData)(
-                                                                ((0xffffffffffffULL 
-                                                                  & ((QData)((IData)(
-                                                                                vlSelf->bsg_tanh__DOT__sinhcosh__DOT__y[0x14U])) 
-                                                                     << 0x10U)) 
-                                                                 >> 0x20U)) 
-                                                        << 2U))));
+    bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U] 
+        = (((0x1fffcU & ((IData)(bsg_tanh__DOT__dividend_li) 
+                         << 2U)) | ((IData)((vlSelf->bsg_tanh__DOT__divider__DOT__add1_out 
+                                             >> 0x20U)) 
+                                    >> 0xfU)) | (0xfffe0000U 
+                                                 & ((IData)(bsg_tanh__DOT__dividend_li) 
+                                                    << 2U)));
+    bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U] 
+        = ((((IData)(bsg_tanh__DOT__dividend_li) >> 0x1eU) 
+            | (0x1fffcU & ((IData)((bsg_tanh__DOT__dividend_li 
+                                    >> 0x20U)) << 2U))) 
+           | ((0x40000U & ((IData)((bsg_tanh__DOT__dividend_li 
+                                    >> 0x2fU)) << 0x12U)) 
+              | (0xfffe0000U & ((IData)((bsg_tanh__DOT__dividend_li 
+                                         >> 0x20U)) 
+                                << 2U))));
     vlSelf->bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked[0U] 
         = (IData)((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                           vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
+                                                           bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
                                            << 0x20U) 
                                           | (QData)((IData)(
-                                                            vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[0U]))) 
+                                                            bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[0U]))) 
                                          & (- (QData)((IData)(
                                                               (1U 
                                                                & (IData)(bsg_tanh__DOT__divider__DOT__opA_sel_lo))))))));
     vlSelf->bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked[1U] 
         = ((0xfffe0000U & vlSelf->bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked[1U]) 
            | (IData)(((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                               vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
+                                                               bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
                                                << 0x20U) 
                                               | (QData)((IData)(
-                                                                vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[0U]))) 
+                                                                bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[0U]))) 
                                              & (- (QData)((IData)(
                                                                   (1U 
                                                                    & (IData)(bsg_tanh__DOT__divider__DOT__opA_sel_lo))))))) 
@@ -1231,13 +1258,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
     vlSelf->bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked[1U] 
         = ((0x1ffffU & vlSelf->bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked[1U]) 
            | ((IData)((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                               vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U])) 
+                                                               bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U])) 
                                                << 0x2fU) 
                                               | (((QData)((IData)(
-                                                                  vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U])) 
+                                                                  bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U])) 
                                                   << 0xfU) 
                                                  | ((QData)((IData)(
-                                                                    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
+                                                                    bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
                                                     >> 0x11U))) 
                                              & (- (QData)((IData)(
                                                                   (1U 
@@ -1246,13 +1273,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
               << 0x11U));
     vlSelf->bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked[2U] 
         = (((IData)((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                             vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U])) 
+                                                             bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U])) 
                                              << 0x2fU) 
                                             | (((QData)((IData)(
-                                                                vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U])) 
+                                                                bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U])) 
                                                 << 0xfU) 
                                                | ((QData)((IData)(
-                                                                  vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
+                                                                  bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
                                                   >> 0x11U))) 
                                            & (- (QData)((IData)(
                                                                 (1U 
@@ -1260,13 +1287,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
                                                                     >> 1U)))))))) 
             >> 0xfU) | ((IData)(((0x1ffffffffffffULL 
                                   & ((((QData)((IData)(
-                                                       vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U])) 
+                                                       bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U])) 
                                        << 0x2fU) | 
                                       (((QData)((IData)(
-                                                        vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U])) 
+                                                        bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U])) 
                                         << 0xfU) | 
                                        ((QData)((IData)(
-                                                        vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
+                                                        bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
                                         >> 0x11U))) 
                                      & (- (QData)((IData)(
                                                           (1U 
@@ -1275,13 +1302,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
                                  >> 0x20U)) << 0x11U));
     vlSelf->bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked[3U] 
         = (3U & ((IData)(((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                                   vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U])) 
+                                                                   bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[3U])) 
                                                    << 0x2fU) 
                                                   | (((QData)((IData)(
-                                                                      vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U])) 
+                                                                      bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[2U])) 
                                                       << 0xfU) 
                                                      | ((QData)((IData)(
-                                                                        vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
+                                                                        bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i[1U])) 
                                                         >> 0x11U))) 
                                                  & (- (QData)((IData)(
                                                                       (1U 
@@ -1418,20 +1445,20 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
                                      << 2U)));
     vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[0U] 
         = (IData)((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                           vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
+                                                           bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
                                            << 0x20U) 
                                           | (QData)((IData)(
-                                                            vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[0U]))) 
+                                                            bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[0U]))) 
                                          & (- (QData)((IData)(
                                                               (1U 
                                                                & (IData)(bsg_tanh__DOT__divider__DOT__opC_sel_lo))))))));
     vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[1U] 
         = ((0xfffe0000U & vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[1U]) 
            | (IData)(((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                               vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
+                                                               bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
                                                << 0x20U) 
                                               | (QData)((IData)(
-                                                                vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[0U]))) 
+                                                                bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[0U]))) 
                                              & (- (QData)((IData)(
                                                                   (1U 
                                                                    & (IData)(bsg_tanh__DOT__divider__DOT__opC_sel_lo))))))) 
@@ -1439,13 +1466,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
     vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[1U] 
         = ((0x1ffffU & vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[1U]) 
            | ((IData)((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                               vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
+                                                               bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
                                                << 0x2fU) 
                                               | (((QData)((IData)(
-                                                                  vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U])) 
+                                                                  bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U])) 
                                                   << 0xfU) 
                                                  | ((QData)((IData)(
-                                                                    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
+                                                                    bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
                                                     >> 0x11U))) 
                                              & (- (QData)((IData)(
                                                                   (1U 
@@ -1454,13 +1481,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
               << 0x11U));
     vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[2U] 
         = (((IData)((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                             vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
+                                                             bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
                                              << 0x2fU) 
                                             | (((QData)((IData)(
-                                                                vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U])) 
+                                                                bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U])) 
                                                 << 0xfU) 
                                                | ((QData)((IData)(
-                                                                  vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
+                                                                  bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
                                                   >> 0x11U))) 
                                            & (- (QData)((IData)(
                                                                 (1U 
@@ -1468,13 +1495,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
                                                                     >> 1U)))))))) 
             >> 0xfU) | ((IData)(((0x1ffffffffffffULL 
                                   & ((((QData)((IData)(
-                                                       vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
+                                                       bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
                                        << 0x2fU) | 
                                       (((QData)((IData)(
-                                                        vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U])) 
+                                                        bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U])) 
                                         << 0xfU) | 
                                        ((QData)((IData)(
-                                                        vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
+                                                        bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
                                         >> 0x11U))) 
                                      & (- (QData)((IData)(
                                                           (1U 
@@ -1484,13 +1511,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
     vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[3U] 
         = ((0xfffffffcU & vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[3U]) 
            | ((IData)(((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                                vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
+                                                                bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
                                                 << 0x2fU) 
                                                | (((QData)((IData)(
-                                                                   vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U])) 
+                                                                   bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[2U])) 
                                                    << 0xfU) 
                                                   | ((QData)((IData)(
-                                                                     vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
+                                                                     bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[1U])) 
                                                      >> 0x11U))) 
                                               & (- (QData)((IData)(
                                                                    (1U 
@@ -1500,13 +1527,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
     vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[3U] 
         = ((3U & vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[3U]) 
            | ((IData)((0x1ffffffffffffULL & ((((QData)((IData)(
-                                                               vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
+                                                               bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
                                                << 0x3eU) 
                                               | (((QData)((IData)(
-                                                                  vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
+                                                                  bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
                                                   << 0x1eU) 
                                                  | ((QData)((IData)(
-                                                                    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
+                                                                    bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
                                                     >> 2U))) 
                                              & (- (QData)((IData)(
                                                                   (1U 
@@ -1516,13 +1543,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
     vlSelf->bsg_tanh__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked[4U] 
         = (0x7ffffU & (((IData)((0x1ffffffffffffULL 
                                  & ((((QData)((IData)(
-                                                      vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
+                                                      bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
                                       << 0x3eU) | (
                                                    ((QData)((IData)(
-                                                                    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
+                                                                    bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
                                                     << 0x1eU) 
                                                    | ((QData)((IData)(
-                                                                      vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
+                                                                      bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
                                                       >> 2U))) 
                                     & (- (QData)((IData)(
                                                          (1U 
@@ -1530,13 +1557,13 @@ VL_ATTR_COLD void Vbsg_tanh___024root___settle__TOP__0(Vbsg_tanh___024root* vlSe
                                                              >> 2U)))))))) 
                         >> 0x1eU) | ((IData)(((0x1ffffffffffffULL 
                                                & ((((QData)((IData)(
-                                                                    vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
+                                                                    bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
                                                     << 0x3eU) 
                                                    | (((QData)((IData)(
-                                                                       vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
+                                                                       bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[4U])) 
                                                        << 0x1eU) 
                                                       | ((QData)((IData)(
-                                                                         vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
+                                                                         bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i[3U])) 
                                                          >> 2U))) 
                                                   & (- (QData)((IData)(
                                                                        (1U 
@@ -2364,10 +2391,17 @@ VL_ATTR_COLD void Vbsg_tanh___024root___ctor_var_reset(Vbsg_tanh___024root* vlSe
     vlSelf->ready_i = VL_RAND_RESET_I(1);
     vlSelf->val_i = VL_RAND_RESET_I(1);
     vlSelf->reset_i = VL_RAND_RESET_I(1);
-    vlSelf->tanh_o = VL_RAND_RESET_I(32);
+    vlSelf->tanh_sel_i = VL_RAND_RESET_I(1);
+    vlSelf->neg_sel_i = VL_RAND_RESET_I(1);
+    vlSelf->data_o = VL_RAND_RESET_I(32);
     vlSelf->ready_o = VL_RAND_RESET_I(1);
     vlSelf->val_o = VL_RAND_RESET_I(1);
-    vlSelf->bsg_tanh__DOT__tanh_r = VL_RAND_RESET_I(32);
+    vlSelf->bsg_tanh__DOT__ang_r = VL_RAND_RESET_I(21);
+    vlSelf->bsg_tanh__DOT__negExp = VL_RAND_RESET_I(32);
+    vlSelf->bsg_tanh__DOT__data_r = VL_RAND_RESET_I(32);
+    vlSelf->bsg_tanh__DOT__data_n = VL_RAND_RESET_I(32);
+    vlSelf->bsg_tanh__DOT__bypass = VL_RAND_RESET_I(1);
+    vlSelf->bsg_tanh__DOT__load_ang = VL_RAND_RESET_I(1);
     vlSelf->bsg_tanh__DOT__state_r = VL_RAND_RESET_I(2);
     vlSelf->bsg_tanh__DOT__state_n = VL_RAND_RESET_I(2);
     VL_RAND_RESET_W(672, vlSelf->bsg_tanh__DOT__sinhcosh__DOT__x);
@@ -2382,13 +2416,11 @@ VL_ATTR_COLD void Vbsg_tanh___024root___ctor_var_reset(Vbsg_tanh___024root* vlSe
     vlSelf->bsg_tanh__DOT__divider__DOT__latch_signed_div_lo = VL_RAND_RESET_I(1);
     vlSelf->bsg_tanh__DOT__divider__DOT__opA_mux = VL_RAND_RESET_Q(49);
     vlSelf->bsg_tanh__DOT__divider__DOT__add1_out = VL_RAND_RESET_Q(49);
-    VL_RAND_RESET_W(98, vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__muxA__data_i);
     vlSelf->bsg_tanh__DOT__divider__DOT__opB_mux = VL_RAND_RESET_Q(49);
     vlSelf->bsg_tanh__DOT__divider__DOT__opC_mux = VL_RAND_RESET_Q(49);
     vlSelf->bsg_tanh__DOT__divider__DOT__opA_ld_lo = VL_RAND_RESET_I(1);
     vlSelf->bsg_tanh__DOT__divider__DOT__opB_ld_lo = VL_RAND_RESET_I(1);
     vlSelf->bsg_tanh__DOT__divider__DOT__opC_ld_lo = VL_RAND_RESET_I(1);
-    VL_RAND_RESET_W(147, vlSelf->bsg_tanh__DOT__divider__DOT____Vcellinp__genblk1__DOT__muxC__data_i);
     vlSelf->bsg_tanh__DOT__divider__DOT__req_reg__DOT__data_r = VL_RAND_RESET_I(1);
     VL_RAND_RESET_W(98, vlSelf->bsg_tanh__DOT__divider__DOT__muxA__DOT__data_masked);
     vlSelf->bsg_tanh__DOT__divider__DOT__opA_reg__DOT__data_r = VL_RAND_RESET_Q(49);

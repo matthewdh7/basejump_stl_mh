@@ -14,7 +14,7 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
     /* verilator lint_on WIDTH */
     /* verilator lint_on CASEINCOMPLETE */
 
-    module bsg_tanh #(parameter neg_prec_p=6, posi_prec_p=12, extr_iter_p=1, ans_width_p = 32, ang_width_p = 21, precision=16)
+    module bsg_tanh #(parameter ans_width_p = %(s)d, ang_width_p = %(g)d, precision=%(c)d)
     (
     input clk_i
     ,input signed [ang_width_p-1:0] ang_i
@@ -29,7 +29,7 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
     logic signed [ans_width_p-1:0] sinh, cosh, tanh_r, tanh_n;
     logic sincosReady, sincosDone, tanReady, tanDone, sincos_val_i, tan_val_i, bypass;
     
-    """ %{'s':ansbitlen, 'g':angbitlen, 'n':negprec, 'p':posprec, 'e':extriter, 'c':precision})
+    """ %{'s':ansbitlen, 'g':angbitlen, 'c':precision})
     return
 
 
@@ -109,7 +109,7 @@ def main_body_print():
     assign tan_val_i = (sincosDone && (state_r == eBUSY1)) && ~bypass;
 
     /* sinh cosh module */
-    bsg_cordic_sine_cosine_hyperbolic #(.neg_prec_p, .posi_prec_p, .extr_iter_p, .ans_width_p, .ang_width_p) sinhcosh
+    bsg_cordic_sine_cosine_hyperbolic #(.neg_prec_p(%(n)d), .posi_prec_p(%(p)d), .extr_iter_p(1), .ans_width_p, .ang_width_p) sinhcosh
     (
      .clk_i
     ,.ang_i
@@ -162,7 +162,7 @@ def main_body_print():
     assign tanh_o = tanh_r;
 
     
-    endmodule""" %{'shift': precision})
+    endmodule""" %{'shift': precision, 'n':negprec, 'p':posprec})
     return
     
 angbitlen = (int)(sys.argv[1])

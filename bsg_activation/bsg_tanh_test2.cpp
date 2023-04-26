@@ -46,7 +46,7 @@ double maxquant = theta_final*pow(2,precision);
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
-unsigned long int startquant = 45000;
+unsigned long int startquant = 1000;
 unsigned long int currquant = startquant;
 
 // The starting quantity is a very important parameter of testing. Due to truncation effect
@@ -59,7 +59,7 @@ unsigned long int currquant = startquant;
 // at least 8-12 bits for decimal point to get above rated results.
 
 // unsigned long int numsamples = (pow(2,anglen-1)-1);
-unsigned long int numsamples = 1000;
+unsigned long int numsamples = 10;
 
 // While testing please be very careful of the number of samples. Sometimes the
 // anglen can make the sample_width = 0 which will definitely result in unnecessary

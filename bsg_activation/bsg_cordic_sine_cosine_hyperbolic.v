@@ -1,6 +1,6 @@
 
     /* verilator lint_off MULTIDRIVEN */
-    module bsg_cordic_sine_cosine_hyperbolic #(parameter neg_prec_p=6, posi_prec_p=12, extr_iter_p=1, ans_width_p = 32, ang_width_p = 21)
+    module bsg_cordic_sine_cosine_hyperbolic #(parameter neg_prec_p=6, posi_prec_p=12, extr_iter_p=1, ans_width_p = 32, ang_width_p = 20)
     (
     input clk_i
     ,input signed [ang_width_p-1:0] ang_i
@@ -25,25 +25,25 @@
     
     
      localparam [neg_prec_p+posi_prec_p:0][ang_width_p-1:0] ang_lookup_lp = {
-     21'h10,
-     21'h20,
-     21'h40,
-     21'h80,
-     21'h100,
-     21'h200,
-     21'h400,
-     21'h800,
-     21'h1005,
-     21'h202b,
-     21'h4162,
-     21'h8c9f,
-     21'hf913,
-     21'h15aa1,
-     21'h1b78c,
-     21'h21252,
-     21'h26c0e,
-     21'h2c548,
-     21'h31e41 };
+     20'h10,
+     20'h20,
+     20'h40,
+     20'h80,
+     20'h100,
+     20'h200,
+     20'h400,
+     20'h800,
+     20'h1005,
+     20'h202b,
+     20'h4162,
+     20'h8c9f,
+     20'hf913,
+     20'h15aa1,
+     20'h1b78c,
+     20'h21252,
+     20'h26c0e,
+     20'h2c548,
+     20'h31e41 };
     
     localparam x_start = 32'h57ce0293;
     localparam y_start = 32'h0;

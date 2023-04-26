@@ -1,16 +1,16 @@
 // Verilated -*- C++ -*-
 // DESCRIPTION: Verilator output: Symbol table implementation internals
 
-#include "Vbsg_tanh__Syms.h"
-#include "Vbsg_tanh.h"
-#include "Vbsg_tanh___024root.h"
+#include "Vbsg_activation__Syms.h"
+#include "Vbsg_activation.h"
+#include "Vbsg_activation___024root.h"
 
 // FUNCTIONS
-Vbsg_tanh__Syms::~Vbsg_tanh__Syms()
+Vbsg_activation__Syms::~Vbsg_activation__Syms()
 {
 }
 
-Vbsg_tanh__Syms::Vbsg_tanh__Syms(VerilatedContext* contextp, const char* namep, Vbsg_tanh* modelp)
+Vbsg_activation__Syms::Vbsg_activation__Syms(VerilatedContext* contextp, const char* namep, Vbsg_activation* modelp)
     : VerilatedSyms{contextp}
     // Setup internal state of the Syms class
     , __Vm_modelp{modelp}

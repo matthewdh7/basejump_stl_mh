@@ -2,7 +2,7 @@
 # DESCRIPTION: Verilator output: Make include file with class lists
 #
 # This file lists generated Verilated files, for including in higher level makefiles.
-# See Vbsg_tanh.mk for the caller.
+# See Vbsg_activation.mk for the caller.
 
 ### Switches...
 # C11 constructs required?  0/1 (always on now)
@@ -23,21 +23,21 @@ VM_TRACE_FST = 0
 ### Object file lists...
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
-	Vbsg_tanh \
-	Vbsg_tanh___024root__DepSet_h29c2a46a__0 \
+	Vbsg_activation \
+	Vbsg_activation___024root__DepSet_h6ec30034__0 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
-	Vbsg_tanh__ConstPool_0 \
-	Vbsg_tanh___024root__Slow \
-	Vbsg_tanh___024root__DepSet_h29c2a46a__0__Slow \
+	Vbsg_activation__ConstPool_0 \
+	Vbsg_activation___024root__Slow \
+	Vbsg_activation___024root__DepSet_h6ec30034__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization
 VM_SUPPORT_FAST += \
 
 # Generated support classes, non-fast-path, compile with low/medium optimization
 VM_SUPPORT_SLOW += \
-	Vbsg_tanh__Syms \
+	Vbsg_activation__Syms \
 
 # Global classes, need linked once per executable, fast-path, compile with highest optimization
 VM_GLOBAL_FAST += \

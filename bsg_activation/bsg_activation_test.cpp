@@ -1,4 +1,4 @@
-#include "Vbsg_tanh.h"
+#include "Vbsg_activation.h"
 #include "verilated.h"
 #include <iostream>
 #include <math.h>
@@ -35,21 +35,19 @@ double theta_max_compute(int negprec, int posiprec)
 	return theta;
 }
 
-
-
 double theta_final = theta_max_compute(negprec, posiprec);
 
 double maxquant = theta_final*pow(2,precision); 
-//double maxquant = 450000;
 
 // The maximum quantity is determined by the angle that can be accumulated
 // by the negative and positive iterations. Please refer to the table mentioned
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
-unsigned long int startquant = 10000;
+unsigned long int startquant = 2;
 unsigned long int currquant = startquant;
 
+// OLD NOTE FROM OLD TESTBENCH
 // The starting quantity is a very important parameter of testing. Due to truncation effect
 // the sense of magnitude of smaller numbers is lost and results in high error. The starting quantity can be
 // 2^(negprec+posprec+1) so that the sense of magnitude is not lost throughout the iterations and 
@@ -59,12 +57,9 @@ unsigned long int currquant = startquant;
 // using some careful fixed point respresentation and it is highly advised to retain
 // at least 8-12 bits for decimal point to get above rated results.
 
-// unsigned long int numsamples = (pow(2,anglen-1)-1);
-unsigned long int numsamples = 100;
-
-// While testing please be very careful of the number of samples. Sometimes the
-// anglen can make the sample_width = 0 which will definitely result in unnecessary
-// high errors. If the test fails, the first thing to check is `sample_width`.
+unsigned long int numsamples = 10000;
+unsigned long int numsamples_tanh;
+unsigned long int numsamples_sig;
 
 unsigned long int sample_width = round((maxquant-startquant)/numsamples);
 																																	
@@ -77,7 +72,7 @@ unsigned int *tanh_sel;
 int main(int argc, char **argv, char **env)
 {
 	Verilated::commandArgs(argc, argv);
-	Vbsg_tanh* top = new Vbsg_tanh;
+	Vbsg_activation* top = new Vbsg_activation;
 
 	#if VM_TRACE
 	Verilated::traceEverOn(true);
@@ -93,7 +88,7 @@ int main(int argc, char **argv, char **env)
 
 	#if VM_TRACE
 	top->trace (tfp, 99);
-	tfp->open ("CORDIC_tanh.vcd");
+	tfp->open ("CORDIC_activation.vcd");
 	#endif
 
 	for(int i=0;i<numsamples;i++){
@@ -158,7 +153,10 @@ int main(int argc, char **argv, char **env)
 
 		float err_tanh = 0;
 		float err_sig = 0;
+
+		//error calculation
 		if (tanh_sel[i]) {
+			numsamples_tanh++;
 			err_tanh = (ideal_value_tanh - obser_value)/ideal_value_tanh;
 			avgerr_tanh += err_tanh;
 			if(maxerr_tanh<fabs(err_tanh)) {
@@ -166,6 +164,7 @@ int main(int argc, char **argv, char **env)
 			max_err_samp_tanh = samp;
 			}
 		} else {
+			numsamples_sig++;
 			err_sig = (ideal_value_sig - obser_value)/ideal_value_sig;
 			avgerr_sig += err_sig;
 			if(maxerr_sig<fabs(err_sig)) {
@@ -180,25 +179,21 @@ int main(int argc, char **argv, char **env)
 		std::cout<<"Output expected:"<<(tanh_sel[i] ? ideal_value_tanh : ideal_value_sig)<<std::endl;
 		std::cout<<"Output received:"<<obser_value<<std::endl;
 		std::cout<<"Error:"<<(tanh_sel[i] ? err_tanh : err_sig) * 100<<"%"<<std::endl;
-
-		// std::cout<<std::endl;
-		// std::cout<<"Input "<<i+1<<" tested for "<<"tanh"<<":"<<samp<<std::endl;
-		// std::cout<<"Output expected:"<<ideal_value_sig<<std::endl;
-		// std::cout<<"Output received:"<<obser_value<<std::endl;
-		// std::cout<<"Error:"<<err_sig * 100<<"%"<<std::endl;
 	}
 
-	avgerr_tanh /= numsamples;
-	avgerr_sig /= numsamples;
+	avgerr_tanh /= numsamples_tanh == 0 ? 1 : numsamples_tanh;
+	avgerr_sig /= numsamples_sig == 0 ? 1 : numsamples_sig;
 
 	std::cout<<std::endl;
 	std::cout<<std::endl;
 	
 	//print overall results
-	std::cout<<"Range of input tested: "<<startquant/pow(2, precision)<<" to "<<maxquant/pow(2,precision);
+	std::cout<<"----------------------------------------------------------------------------------------"<<std::endl;
+	std::cout<<" Range of input tested: "<<startquant/pow(2, precision)<<" to "<<maxquant/pow(2,precision);
 	std::cout<<" with a spacing of "<<sample_width/pow(2, precision)<<std::endl;
-	std::cout<<"Average errors: "<<avgerr_tanh<<"% [tanh], "<<avgerr_sig<<"% [sigmoid]"<<std::endl;
-	//std::cout<<"Average errors: "<<avgerr_sig<<"%"<<std::endl;
+	std::cout<<" Average errors: "<<avgerr_tanh<<"% [tanh], "<<avgerr_sig<<"% [sigmoid]"<<std::endl;
+	std::cout<<" Precision: "<<precision<<"; Sample width: "<<sample_width/pow(2,precision)<<std::endl;
+	std::cout<<"----------------------------------------------------------------------------------------"<<std::endl;
 
 	#if VM_TRACE
 	tfp->close();

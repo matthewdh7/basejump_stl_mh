@@ -11,9 +11,9 @@
     /* verilator lint_on WIDTH */
     /* verilator lint_on CASEINCOMPLETE */
 
-    module bsg_tanh #(parameter 
+    module bsg_activation #(parameter 
          ans_width_p = 32
-        ,ang_width_p = 21
+        ,ang_width_p = 20
         ,precision = 16
         ,parameter [ang_width_p-precision-1:0] thresh_tanh_p = 'd4
         ,parameter [ang_width_p-precision-1:0] thresh_sig_p = 'd7
@@ -40,7 +40,6 @@
 
     wire [ang_width_p-1:0] thresh_tanh = {thresh_tanh_p, precision'('d0)};
     wire [ang_width_p-1:0] thresh_sig = {thresh_sig_p, precision'('d0)};
-    
     
   
     /* state logic */

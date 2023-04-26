@@ -14,7 +14,7 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
     /* verilator lint_on WIDTH */
     /* verilator lint_on CASEINCOMPLETE */
 
-    module bsg_tanh #(parameter 
+    module bsg_activation #(parameter 
          ans_width_p = %(s)d
         ,ang_width_p = %(g)d
         ,precision = %(c)d
@@ -43,7 +43,6 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
 
     wire [ang_width_p-1:0] thresh_tanh = {thresh_tanh_p, precision'('d0)};
     wire [ang_width_p-1:0] thresh_sig = {thresh_sig_p, precision'('d0)};
-    
     """ %{'s':ansbitlen, 'g':angbitlen, 'c':precision})
     return
 

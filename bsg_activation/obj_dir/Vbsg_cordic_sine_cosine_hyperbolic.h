@@ -29,7 +29,7 @@ class Vbsg_cordic_sine_cosine_hyperbolic VL_NOT_FINAL : public VerilatedModel {
     VL_IN8(&val_i,0,0);
     VL_OUT8(&ready_o,0,0);
     VL_OUT8(&val_o,0,0);
-    VL_IN(&ang_i,20,0);
+    VL_IN(&ang_i,19,0);
     VL_OUT(&sinh_o,31,0);
     VL_OUT(&cosh_o,31,0);
 

@@ -5,19 +5,19 @@
 // The class here is then constructed to instantiate the design.
 // See the Verilator manual for examples.
 
-#ifndef VERILATED_VBSG_TANH_H_
-#define VERILATED_VBSG_TANH_H_  // guard
+#ifndef VERILATED_VBSG_ACTIVATION_H_
+#define VERILATED_VBSG_ACTIVATION_H_  // guard
 
 #include "verilated.h"
 
-class Vbsg_tanh__Syms;
-class Vbsg_tanh___024root;
+class Vbsg_activation__Syms;
+class Vbsg_activation___024root;
 
 // This class is the main interface to the Verilated model
-class Vbsg_tanh VL_NOT_FINAL : public VerilatedModel {
+class Vbsg_activation VL_NOT_FINAL : public VerilatedModel {
   private:
     // Symbol table holding complete model state (owned by this class)
-    Vbsg_tanh__Syms* const vlSymsp;
+    Vbsg_activation__Syms* const vlSymsp;
 
   public:
 
@@ -32,7 +32,7 @@ class Vbsg_tanh VL_NOT_FINAL : public VerilatedModel {
     VL_IN8(&neg_sel_i,0,0);
     VL_OUT8(&ready_o,0,0);
     VL_OUT8(&val_o,0,0);
-    VL_IN(&ang_i,20,0);
+    VL_IN(&ang_i,19,0);
     VL_OUT(&data_o,31,0);
 
     // CELLS
@@ -41,19 +41,19 @@ class Vbsg_tanh VL_NOT_FINAL : public VerilatedModel {
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.
-    Vbsg_tanh___024root* const rootp;
+    Vbsg_activation___024root* const rootp;
 
     // CONSTRUCTORS
     /// Construct the model; called by application code
     /// If contextp is null, then the model will use the default global context
     /// If name is "", then makes a wrapper with a
     /// single model invisible with respect to DPI scope names.
-    explicit Vbsg_tanh(VerilatedContext* contextp, const char* name = "TOP");
-    explicit Vbsg_tanh(const char* name = "TOP");
+    explicit Vbsg_activation(VerilatedContext* contextp, const char* name = "TOP");
+    explicit Vbsg_activation(const char* name = "TOP");
     /// Destroy the model; called (often implicitly) by application code
-    virtual ~Vbsg_tanh();
+    virtual ~Vbsg_activation();
   private:
-    VL_UNCOPYABLE(Vbsg_tanh);  ///< Copying not allowed
+    VL_UNCOPYABLE(Vbsg_activation);  ///< Copying not allowed
 
   public:
     // API METHODS

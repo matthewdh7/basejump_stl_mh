@@ -44,7 +44,7 @@ double maxquant = theta_final*pow(2,precision);
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
-unsigned long int startquant = 2;
+unsigned long int startquant = 100;
 unsigned long int currquant = startquant;
 
 // OLD NOTE FROM OLD TESTBENCH
@@ -192,7 +192,7 @@ int main(int argc, char **argv, char **env)
 	std::cout<<" Range of input tested: "<<startquant/pow(2, precision)<<" to "<<maxquant/pow(2,precision);
 	std::cout<<" with a spacing of "<<sample_width/pow(2, precision)<<std::endl;
 	std::cout<<" Average errors: "<<avgerr_tanh<<"% [tanh], "<<avgerr_sig<<"% [sigmoid]"<<std::endl;
-	std::cout<<" Precision: "<<precision<<"; Sample width: "<<sample_width/pow(2,precision)<<std::endl;
+	std::cout<<" Precision: "<<precision<<"; Max Error: "<<fmax(maxerr_sig, maxerr_tanh)<<"%"<<std::endl;
 	std::cout<<"----------------------------------------------------------------------------------------"<<std::endl;
 
 	#if VM_TRACE

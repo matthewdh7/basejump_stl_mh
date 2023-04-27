@@ -92,6 +92,7 @@ $(GENERATED_VERILOG_FILE_SINCOS):
 		python3 bsg_sine_cosine_hyperbolic_script.py 20 32 6 12 16 4 > $(GENERATED_VERILOG_FILE_SINCOS)
 
 # random garbage testing stuff
+# source /opt/rh/devtoolset-11/enable
 # export VERILATOR_ROOT=$HOME/verilator
 # export PATH=$PATH:$VERILATOR_ROOT/bin
 # $HOME/verilator/install/bin/verilator -Wall --cc --build bsg_activation_test2.cpp --top-module bsg_activation --Mdir obj_dir bsg_activation.v   -Wno-UNUSED

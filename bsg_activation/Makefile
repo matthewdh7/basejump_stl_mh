@@ -50,10 +50,10 @@ endif
 
 $(VERI_DIR)/Vbsg_activation: Vbsg_activation.mk
 		make -j -C $(VERI_DIR) -f Vbsg_activation.mk Vbsg_activation
-
+# parameter format in this makefile: angbitlen, ansbitlen, negprec, posprec, precision, startquantpow (unused now)
 $(GENERATED_VERILOG_FILE_ACT):
 		echo -n > $(GENERATED_VERILOG_FILE_ACT)
-		python3 bsg_activation_script.py 20 32 6 12 16 4 > $(GENERATED_VERILOG_FILE_ACT)
+		python3 bsg_activation_script.py 21 32 6 12 16 4 > $(GENERATED_VERILOG_FILE_ACT)
 
 clean:
 		rm -rf $(FILE_DEL)
@@ -89,7 +89,7 @@ $(VERI_DIR)/Vbsg_cordic_sine_cosine_hyperbolic: Vbsg_cordic_sine_cosine_hyperbol
 
 $(GENERATED_VERILOG_FILE_SINCOS):
 		echo -n > $(GENERATED_VERILOG_FILE_SINCOS)
-		python3 bsg_sine_cosine_hyperbolic_script.py 20 32 6 12 16 4 > $(GENERATED_VERILOG_FILE_SINCOS)
+		python3 bsg_sine_cosine_hyperbolic_script.py 21 32 6 12 16 4 > $(GENERATED_VERILOG_FILE_SINCOS)
 
 # random garbage testing stuff
 # source /opt/rh/devtoolset-11/enable

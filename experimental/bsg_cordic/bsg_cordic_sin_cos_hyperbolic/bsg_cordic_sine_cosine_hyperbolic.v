@@ -1,5 +1,4 @@
 
-    /* verilator lint_off MULTIDRIVEN */
     module bsg_cordic_sine_cosine_hyperbolic #(parameter neg_prec_p=6, posi_prec_p=12, extr_iter_p=1, ans_width_p = 32, ang_width_p = 21)
     (
     input clk_i

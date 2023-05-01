@@ -18,8 +18,13 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
          ans_width_p = %(s)d
         ,ang_width_p = %(g)d
         ,precision = %(c)d
-        ,parameter [ang_width_p-precision-1:0] thresh_tanh_p = 'd4
-        ,parameter [ang_width_p-precision-1:0] thresh_sig_p = 'd7
+        /*
+        THRESHOLD PARAMETERS: Input as an 8 bit binary value, xxxx.xxxx ; if the
+        input angle is greater than this value, the module will output 1 and bypass
+        any calculations. Could increase size of parameter to allow more precise threshold.
+        */
+        ,parameter [7:0] thresh_tanh_p = 8'b00111100 //3.75 decimal
+        ,parameter [7:0] thresh_sig_p = 8'b01110000 //7.00 decimal
     ) (
      input clk_i
     ,input signed [ang_width_p-1:0] ang_i
@@ -27,7 +32,6 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
     ,input val_i
     ,input reset_i
     ,input tanh_sel_i
-    ,input neg_sel_i
     ,output signed [ans_width_p-1:0] data_o
     ,output ready_o
     ,output val_o
@@ -41,8 +45,8 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
     logic sincos_v_i, sincos_ready_o, sincos_v_o, divider_v_i, divider_ready_o, divider_v_o; //handshake signals
     logic bypass, load_ang, divider_sel; //control signals
 
-    wire [ang_width_p-1:0] thresh_tanh = {thresh_tanh_p, precision'('d0)};
-    wire [ang_width_p-1:0] thresh_sig = {thresh_sig_p, precision'('d0)};
+    wire [ang_width_p-1:0] thresh_tanh = {(ang_width_p-precision-4)'('d0), thresh_tanh_p, (precision-4)'('d0)};
+    wire [ang_width_p-1:0] thresh_sig = {(ang_width_p-precision-4)'('d0), thresh_sig_p, (precision-4)'('d0)};
     """ %{'s':ansbitlen, 'g':angbitlen, 'c':precision})
     return
 
@@ -142,7 +146,8 @@ def main_body_print():
     /* input register */
     always_ff @(posedge clk_i) begin
         if (reset_i)        ang_r <= 0;
-        else if (load_ang)  ang_r <= ang_i; //occurs if val_i and ready_o
+        //occurs if val_i and ready_o; if negative, flip using 2s comp and compute abs value
+        else if (load_ang)  ang_r <= ang_i[ang_width_p-1] ? ~ang_i + 1'b1 : ang_i;
         else                ang_r <= ang_r;
     end
 
@@ -197,8 +202,9 @@ def main_body_print():
     always_ff @(posedge clk_i) begin
         if (divider_v_o || bypass)  begin
             //if sigmoid and negative input, correct by subtracting divider output from 1
-            if (neg_sel_i && ~tanh_sel_i) data_r <= {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}} - data_n;
-            else            data_r <= data_n;
+            if (ang_i[ang_width_p-1] && ~tanh_sel_i) data_r <= {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}} - data_n;
+            //if tanh and negative input, flip back to negative
+            else            data_r <= ang_i[ang_width_p-1] ? ~data_n + 1'b1 : data_n;
             end
         else                data_r <= data_r;
     end

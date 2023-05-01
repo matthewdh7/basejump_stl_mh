@@ -37,7 +37,8 @@ double theta_max_compute(int negprec, int posiprec)
 
 double theta_final = theta_max_compute(negprec, posiprec);
 
-double maxquant = theta_final*pow(2,precision); 
+//double maxquant = theta_final*pow(2,precision); 
+double maxquant = 400000; 
 
 // The maximum quantity is determined by the angle that can be accumulated
 // by the negative and positive iterations. Please refer to the table mentioned
@@ -84,7 +85,6 @@ int main(int argc, char **argv, char **env)
 	result = new unsigned long int [numsamples];
 	tanh_sel = new unsigned int [numsamples];
 	int ready_in = 1;
-	top->neg_sel_i = 0;
 
 	#if VM_TRACE
 	top->trace (tfp, 99);
@@ -102,7 +102,8 @@ int main(int argc, char **argv, char **env)
 				currquant += sample_width;
 				samp_len++;
 
-				top->tanh_sel_i = rand() % 2;
+				//top->tanh_sel_i = rand() % 2;
+				top->tanh_sel_i = 1;
 				tanh_sel[i] = top->tanh_sel_i;
 				
 				top->val_i = 1;
@@ -141,8 +142,8 @@ int main(int argc, char **argv, char **env)
 	float avgerr_sig;
 	float avgerr_tanh;
 
-    double max_err_samp_tanh;
-	double max_err_samp_sig;
+    double maxerr_samp_tanh;
+	double maxerr_samp_sig;
 
 	for(int i=0;i<samp_len;i++){
 		float samp = samples[i]/pow(2,precision);
@@ -159,17 +160,18 @@ int main(int argc, char **argv, char **env)
 			numsamples_tanh++;
 			err_tanh = (ideal_value_tanh - obser_value)/ideal_value_tanh;
 			avgerr_tanh += err_tanh;
-			if(maxerr_tanh<fabs(err_tanh)) {
+			if(fabs(maxerr_tanh)<fabs(err_tanh)) {
 			maxerr_tanh = err_tanh;
-			max_err_samp_tanh = samp;
+			maxerr_samp_tanh = samp;
 			}
 		} else {
 			numsamples_sig++;
 			err_sig = (ideal_value_sig - obser_value)/ideal_value_sig;
 			avgerr_sig += err_sig;
-			if(maxerr_sig<fabs(err_sig)) {
+			std::cout<<"Curr err"<<err_sig<<" and maxerr "<<maxerr_sig<<std::endl;
+			if(fabs(maxerr_sig)<fabs(err_sig)) {
 			maxerr_sig = err_sig;
-			max_err_samp_sig = samp;
+			maxerr_samp_sig = samp;
 			}
 		}
 
@@ -182,7 +184,11 @@ int main(int argc, char **argv, char **env)
 	}
 
 	avgerr_tanh /= numsamples_tanh == 0 ? 1 : numsamples_tanh;
+	avgerr_tanh *= 100;
+	maxerr_tanh *= 100;
 	avgerr_sig /= numsamples_sig == 0 ? 1 : numsamples_sig;
+	avgerr_sig *= 100;
+	maxerr_sig *= 100;
 
 	std::cout<<std::endl;
 	std::cout<<std::endl;
@@ -192,7 +198,8 @@ int main(int argc, char **argv, char **env)
 	std::cout<<" Range of input tested: "<<startquant/pow(2, precision)<<" to "<<maxquant/pow(2,precision);
 	std::cout<<" with a spacing of "<<sample_width/pow(2, precision)<<std::endl;
 	std::cout<<" Average errors: "<<avgerr_tanh<<"% [tanh], "<<avgerr_sig<<"% [sigmoid]"<<std::endl;
-	std::cout<<" Precision: "<<precision<<"; Max Error: "<<fmax(maxerr_sig, maxerr_tanh)<<"%"<<std::endl;
+	std::cout<<" Precision: "<<precision<<"; Max (abs) Error: "<<fmax(fabs(maxerr_sig), fabs(maxerr_tanh))<<"% at input ";
+	std::cout<<(fabs(maxerr_sig)>fabs(maxerr_tanh) ? maxerr_samp_sig : maxerr_samp_tanh)<<std::endl;
 	std::cout<<"----------------------------------------------------------------------------------------"<<std::endl;
 
 	#if VM_TRACE

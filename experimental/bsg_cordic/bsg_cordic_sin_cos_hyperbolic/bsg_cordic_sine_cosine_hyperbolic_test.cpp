@@ -49,7 +49,8 @@ double maxquant = theta_final*pow(2,precision);
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
-unsigned long int startquant = pow(2,startquant_pow);
+//unsigned long int startquant = pow(2,startquant_pow);
+unsigned long int startquant = 100;
 
 // The starting quantity is a very important parameter of testing. Due to truncation effect
 // the sense of magnitude of smaller numbers is lost and results in high error. The starting quantity can be
@@ -60,7 +61,8 @@ unsigned long int startquant = pow(2,startquant_pow);
 // using some careful fixed point respresentation and it is highly advised to retain
 // at least 8-12 bits for decimal point to get above rated results.
 
-unsigned long int numsamples = (pow(2,anglen-1)-1);
+// unsigned long int numsamples = (pow(2,anglen-1)-1);
+unsigned long int numsamples = 100;
 
 // While testing please be very careful of the number of samples. Sometimes the
 // anglen can make the sample_width = 0 which will definitely result in unnecessary
@@ -154,15 +156,24 @@ int main(int argc, char **argv, char **env)
 
 	for(int i=0;i<samp_len;i++){
 		float samp = samples[i]/pow(2,precision);
+		std::cout<<"Input: "<<samp<<std::endl;
 
 		double ideal_value_sinh = sinh(samp);
 		double ideal_value_cosh = cosh(samp);
-
+		
 		double obser_value_sinh = result_sinh[i+(negprec+posiprec+1+2)]/pow(2,precision);
 		double obser_value_cosh = result_cosh[i+(negprec+posiprec+1+2)]/pow(2,precision);
+		std::cout<<"Sinh expected: "<<ideal_value_sinh<<std::endl;
+		std::cout<<"Sinh actual: "<<obser_value_sinh<<std::endl;
+
+		std::cout<<"Cosh expected: "<<ideal_value_cosh<<std::endl;
+		std::cout<<"Cosh actual: "<<obser_value_cosh<<std::endl;
 
 		float err_sinh = (ideal_value_sinh - obser_value_sinh)/ideal_value_sinh;
 		float err_cosh = (ideal_value_cosh - obser_value_sinh)/ideal_value_cosh;
+		std::cout<<"Sinh error: "<<err_sinh<<std::endl;
+		std::cout<<"Cosh error: "<<err_cosh<<std::endl;
+		std::cout<<std::endl;
 
 		double sinh_err = err_sinh*err_sinh;
 		double cosh_err = err_cosh*err_cosh;

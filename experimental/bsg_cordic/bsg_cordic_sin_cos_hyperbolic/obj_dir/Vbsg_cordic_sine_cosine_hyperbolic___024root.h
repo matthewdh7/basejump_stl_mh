@@ -8,8 +8,7 @@
 #include "verilated.h"
 
 class Vbsg_cordic_sine_cosine_hyperbolic__Syms;
-
-class Vbsg_cordic_sine_cosine_hyperbolic___024root final : public VerilatedModule {
+VL_MODULE(Vbsg_cordic_sine_cosine_hyperbolic___024root) {
   public:
 
     // DESIGN SPECIFIC STATE
@@ -33,15 +32,15 @@ class Vbsg_cordic_sine_cosine_hyperbolic___024root final : public VerilatedModul
     IData/*19:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__val_ans;
 
     // INTERNAL VARIABLES
-    Vbsg_cordic_sine_cosine_hyperbolic__Syms* const vlSymsp;
+    Vbsg_cordic_sine_cosine_hyperbolic__Syms* vlSymsp;  // Symbol table
 
     // CONSTRUCTORS
-    Vbsg_cordic_sine_cosine_hyperbolic___024root(Vbsg_cordic_sine_cosine_hyperbolic__Syms* symsp, const char* name);
+    Vbsg_cordic_sine_cosine_hyperbolic___024root(const char* name);
     ~Vbsg_cordic_sine_cosine_hyperbolic___024root();
     VL_UNCOPYABLE(Vbsg_cordic_sine_cosine_hyperbolic___024root);
 
     // INTERNAL METHODS
-    void __Vconfigure(bool first);
+    void __Vconfigure(Vbsg_cordic_sine_cosine_hyperbolic__Syms* symsp, bool first);
 } VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
 
 

@@ -30,6 +30,7 @@ VL_MODULE(Vbsg_cordic_sine_cosine_hyperbolic___024root) {
     VlWide<20>/*639:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__y_ans;
     VlWide<14>/*419:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__ang_ans;
     IData/*19:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__val_ans;
+    VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
 
     // INTERNAL VARIABLES
     Vbsg_cordic_sine_cosine_hyperbolic__Syms* vlSymsp;  // Symbol table

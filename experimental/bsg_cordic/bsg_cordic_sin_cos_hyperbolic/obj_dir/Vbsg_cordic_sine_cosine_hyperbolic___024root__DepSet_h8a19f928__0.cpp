@@ -1165,6 +1165,7 @@ void Vbsg_cordic_sine_cosine_hyperbolic___024root___eval(Vbsg_cordic_sine_cosine
     // Body
     if (((IData)(vlSelf->clk_i) & (~ (IData)(vlSelf->__Vclklast__TOP__clk_i)))) {
         Vbsg_cordic_sine_cosine_hyperbolic___024root___sequent__TOP__0(vlSelf);
+        vlSelf->__Vm_traceActivity[1U] = 1U;
     }
     Vbsg_cordic_sine_cosine_hyperbolic___024root___combo__TOP__0(vlSelf);
     // Final

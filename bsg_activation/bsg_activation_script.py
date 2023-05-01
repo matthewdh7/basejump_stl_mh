@@ -39,7 +39,7 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
 
     parameter SHFT_AMT = %(c)d;
 
-    logic signed [ang_width_p-1:0] ang_r;
+    logic signed [ang_width_p-1:0] ang_n, ang_r;
     logic signed [ans_width_p-1:0] sinh_lo, cosh_lo, negExp, data_r, data_n; //negExp = e^-x
     logic signed [ans_width_p+SHFT_AMT-1:0] dividend_li, divisor_li, remainder_lo, divider_lo;    //larger signals to account for shifting
     logic sincos_v_i, sincos_ready_o, sincos_v_o, divider_v_i, divider_ready_o, divider_v_o; //handshake signals
@@ -128,7 +128,7 @@ def main_body_print():
         case (state_r)
             e_IDLE: begin 
                 if (val_i && ready_o) load_ang = 1;
-                if (ang_i > (tanh_sel_i ? thresh_tanh : thresh_sig)) bypass = 1;
+                if (ang_n > (tanh_sel_i ? thresh_tanh : thresh_sig)) bypass = 1;
             end
             e_SINCOS: if (tanh_sel_i) divider_sel = 1;
             default: begin
@@ -144,10 +144,13 @@ def main_body_print():
     assign divider_v_i = (state_r == e_DIVIDE) && ~bypass;
 
     /* input register */
+    //if negative, flip using 2s comp and compute abs value
+    assign ang_n = ang_i[ang_width_p-1] ? ~ang_i + 1'b1 : ang_i;
+
     always_ff @(posedge clk_i) begin
         if (reset_i)        ang_r <= 0;
-        //occurs if val_i and ready_o; if negative, flip using 2s comp and compute abs value
-        else if (load_ang)  ang_r <= ang_i[ang_width_p-1] ? ~ang_i + 1'b1 : ang_i;
+        //occurs if val_i and ready_o
+        else if (load_ang)  ang_r <= ang_n;
         else                ang_r <= ang_r;
     end
 

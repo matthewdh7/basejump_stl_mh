@@ -7,6 +7,8 @@
 ### Switches...
 # C11 constructs required?  0/1 (always on now)
 VM_C11 = 1
+# Timing enabled?  0/1
+VM_TIMING = 0
 # Coverage output mode?  0/1 (from --coverage)
 VM_COVERAGE = 0
 # Parallel builds?  0/1 (from --output-split)
@@ -24,11 +26,13 @@ VM_TRACE_FST = 0
 # Generated module classes, fast-path, compile with highest optimization
 VM_CLASSES_FAST += \
 	Vbsg_cordic_sine_cosine_hyperbolic \
+	Vbsg_cordic_sine_cosine_hyperbolic___024root__DepSet_h319ccccf__0 \
 	Vbsg_cordic_sine_cosine_hyperbolic___024root__DepSet_h8a19f928__0 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
 	Vbsg_cordic_sine_cosine_hyperbolic___024root__Slow \
+	Vbsg_cordic_sine_cosine_hyperbolic___024root__DepSet_h319ccccf__0__Slow \
 	Vbsg_cordic_sine_cosine_hyperbolic___024root__DepSet_h8a19f928__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization

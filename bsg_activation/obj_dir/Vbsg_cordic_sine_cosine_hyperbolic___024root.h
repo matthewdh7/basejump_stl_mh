@@ -19,7 +19,8 @@ class Vbsg_cordic_sine_cosine_hyperbolic___024root final : public VerilatedModul
     VL_OUT8(ready_o,0,0);
     VL_OUT8(val_o,0,0);
     CData/*0:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__stall_pipe;
-    CData/*0:0*/ __Vclklast__TOP__clk_i;
+    CData/*0:0*/ __Vtrigrprev__TOP__clk_i;
+    CData/*0:0*/ __VactContinue;
     VL_IN(ang_i,20,0);
     VL_OUT(sinh_o,31,0);
     VL_OUT(cosh_o,31,0);
@@ -31,6 +32,13 @@ class Vbsg_cordic_sine_cosine_hyperbolic___024root final : public VerilatedModul
     VlWide<20>/*639:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__y_ans;
     VlWide<14>/*419:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__ang_ans;
     IData/*19:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__val_ans;
+    IData/*31:0*/ __VstlIterCount;
+    IData/*31:0*/ __VicoIterCount;
+    IData/*31:0*/ __VactIterCount;
+    VlTriggerVec<1> __VstlTriggered;
+    VlTriggerVec<1> __VicoTriggered;
+    VlTriggerVec<1> __VactTriggered;
+    VlTriggerVec<1> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vbsg_cordic_sine_cosine_hyperbolic__Syms* const vlSymsp;

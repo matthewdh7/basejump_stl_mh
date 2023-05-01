@@ -50,7 +50,7 @@ double maxquant = theta_final*pow(2,precision);
 // iterations.
 									  
 //unsigned long int startquant = pow(2,startquant_pow);
-unsigned long int startquant = 100;
+unsigned long int startquant = 2096152;
 
 // The starting quantity is a very important parameter of testing. Due to truncation effect
 // the sense of magnitude of smaller numbers is lost and results in high error. The starting quantity can be
@@ -62,7 +62,7 @@ unsigned long int startquant = 100;
 // at least 8-12 bits for decimal point to get above rated results.
 
 // unsigned long int numsamples = (pow(2,anglen-1)-1);
-unsigned long int numsamples = 100;
+unsigned long int numsamples = 1;
 
 // While testing please be very careful of the number of samples. Sometimes the
 // anglen can make the sample_width = 0 which will definitely result in unnecessary
@@ -112,18 +112,17 @@ int main(int argc, char **argv, char **env)
 
 			if((main_time%10)==0){
 
-				if(startquant<maxquant){
+				//if(startquant<maxquant){
 				top->ang_i = startquant;
 				samples[i] = startquant;
 				samp_len++;
-				}
+				//}
 
 				top->val_i = valid_in;
 				top->ready_i = ready_in;
 				top->clk_i = 1;
-				result_sinh[i] = top->sinh_o;
-				result_cosh[i] = top->cosh_o;
-				startquant+=sample_width;
+			
+				//startquant+=sample_width;
 				int val_i = top->val_i;
 				int val_o = top->val_o;
 				int ready_i = top->ready_i;
@@ -139,7 +138,10 @@ int main(int argc, char **argv, char **env)
 			main_time++;
 			
 		}
-
+		if (top->val_o) {
+			result_sinh[i] = top->sinh_o;
+			result_cosh[i] = top->cosh_o;
+		}
 		main_time = 0;
 	}	
 

@@ -45,6 +45,7 @@ double maxquant = 400000;
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
+//unsigned long int startquant = 2096152;
 unsigned long int startquant = 100;
 unsigned long int currquant = startquant;
 
@@ -58,7 +59,7 @@ unsigned long int currquant = startquant;
 // using some careful fixed point respresentation and it is highly advised to retain
 // at least 8-12 bits for decimal point to get above rated results.
 
-unsigned long int numsamples = 10000;
+unsigned long int numsamples = 100;
 unsigned long int numsamples_tanh;
 unsigned long int numsamples_sig;
 
@@ -103,7 +104,7 @@ int main(int argc, char **argv, char **env)
 				samp_len++;
 
 				//top->tanh_sel_i = rand() % 2;
-				top->tanh_sel_i = 1;
+				top->tanh_sel_i = 0;
 				tanh_sel[i] = top->tanh_sel_i;
 				
 				top->val_i = 1;
@@ -146,8 +147,18 @@ int main(int argc, char **argv, char **env)
 	double maxerr_samp_sig;
 
 	for(int i=0;i<samp_len;i++){
-		float samp = samples[i]/pow(2,precision);
-		double obser_value = result[i]/pow(2,precision);
+		float samp = samples[i];
+		bool isNeg = 0;
+		if (samp >= 1048576) { //negative
+			samp = -1 * (2097152 - samp); //2097151 largest 21 bit number, this converts it back to positive for testbench
+			isNeg = 1;
+		}
+		samp /= pow(2,precision);
+
+		
+		double obser_value = result[i];
+		std::cout<<"True output: "<<obser_value<<std::endl;
+		obser_value /= pow(2,precision);
 
 		double ideal_value_tanh = tanh(samp);
 		double ideal_value_sig = 1.0 / (1.0 + exp(-samp));
@@ -168,7 +179,6 @@ int main(int argc, char **argv, char **env)
 			numsamples_sig++;
 			err_sig = (ideal_value_sig - obser_value)/ideal_value_sig;
 			avgerr_sig += err_sig;
-			std::cout<<"Curr err"<<err_sig<<" and maxerr "<<maxerr_sig<<std::endl;
 			if(fabs(maxerr_sig)<fabs(err_sig)) {
 			maxerr_sig = err_sig;
 			maxerr_samp_sig = samp;

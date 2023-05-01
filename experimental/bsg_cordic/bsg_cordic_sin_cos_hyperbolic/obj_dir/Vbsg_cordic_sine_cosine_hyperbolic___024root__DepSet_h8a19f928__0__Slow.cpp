@@ -876,6 +876,8 @@ VL_ATTR_COLD void Vbsg_cordic_sine_cosine_hyperbolic___024root___eval_settle(Vbs
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vbsg_cordic_sine_cosine_hyperbolic___024root___eval_settle\n"); );
     // Body
     Vbsg_cordic_sine_cosine_hyperbolic___024root___settle__TOP__0(vlSelf);
+    vlSelf->__Vm_traceActivity[1U] = 1U;
+    vlSelf->__Vm_traceActivity[0U] = 1U;
 }
 
 VL_ATTR_COLD void Vbsg_cordic_sine_cosine_hyperbolic___024root___final(Vbsg_cordic_sine_cosine_hyperbolic___024root* vlSelf) {
@@ -906,4 +908,7 @@ VL_ATTR_COLD void Vbsg_cordic_sine_cosine_hyperbolic___024root___ctor_var_reset(
     VL_RAND_RESET_W(420, vlSelf->bsg_cordic_sine_cosine_hyperbolic__DOT__ang_ans);
     vlSelf->bsg_cordic_sine_cosine_hyperbolic__DOT__val_ans = VL_RAND_RESET_I(20);
     vlSelf->bsg_cordic_sine_cosine_hyperbolic__DOT__stall_pipe = VL_RAND_RESET_I(1);
+    for (int __Vi0=0; __Vi0<2; ++__Vi0) {
+        vlSelf->__Vm_traceActivity[__Vi0] = VL_RAND_RESET_I(1);
+    }
 }

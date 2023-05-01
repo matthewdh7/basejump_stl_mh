@@ -60,7 +60,7 @@ clean:
 
 setup:
 	cd $$HOME/verilator
-	git checkout v4.228
+	git checkout v5.002
 	autoconf
 	./configure --prefix=$$PWD/install
 	make -j80

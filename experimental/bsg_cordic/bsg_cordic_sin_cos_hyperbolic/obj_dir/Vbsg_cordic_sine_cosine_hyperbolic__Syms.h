@@ -21,6 +21,8 @@ class Vbsg_cordic_sine_cosine_hyperbolic__Syms final : public VerilatedSyms {
   public:
     // INTERNAL STATE
     Vbsg_cordic_sine_cosine_hyperbolic* const __Vm_modelp;
+    bool __Vm_activity = false;  ///< Used by trace routines to determine change occurred
+    uint32_t __Vm_baseCode = 0;  ///< Used by trace routines when tracing multiple models
     bool __Vm_didInit = false;
 
     // MODULE INSTANCE STATE

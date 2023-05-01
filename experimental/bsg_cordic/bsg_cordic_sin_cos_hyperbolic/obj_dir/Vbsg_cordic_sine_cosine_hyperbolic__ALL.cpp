@@ -2,6 +2,9 @@
 #define VL_INCLUDE_OPT include
 #include "Vbsg_cordic_sine_cosine_hyperbolic.cpp"
 #include "Vbsg_cordic_sine_cosine_hyperbolic___024root__DepSet_h8a19f928__0.cpp"
+#include "Vbsg_cordic_sine_cosine_hyperbolic__Trace__0.cpp"
+#include "Vbsg_cordic_sine_cosine_hyperbolic__ConstPool_0.cpp"
 #include "Vbsg_cordic_sine_cosine_hyperbolic___024root__Slow.cpp"
 #include "Vbsg_cordic_sine_cosine_hyperbolic___024root__DepSet_h8a19f928__0__Slow.cpp"
 #include "Vbsg_cordic_sine_cosine_hyperbolic__Syms.cpp"
+#include "Vbsg_cordic_sine_cosine_hyperbolic__Trace__0__Slow.cpp"

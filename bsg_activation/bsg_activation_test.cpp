@@ -5,6 +5,8 @@
 #include "params_def.h" 
 #include <sstream>
 #include <cstdlib>
+#include <bits/stdc++.h> 
+using namespace std;
 
 #if VM_TRACE			
 #include <verilated_vcd_c.h> 
@@ -38,15 +40,14 @@ double theta_max_compute(int negprec, int posiprec)
 double theta_final = theta_max_compute(negprec, posiprec);
 
 //double maxquant = theta_final*pow(2,precision); 
-double maxquant = 400000; 
+double maxquant = 100; 
 
 // The maximum quantity is determined by the angle that can be accumulated
 // by the negative and positive iterations. Please refer to the table mentioned
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
-//unsigned long int startquant = 2096152;
-unsigned long int startquant = 100;
+unsigned long int startquant = 0;
 unsigned long int currquant = startquant;
 
 // OLD NOTE FROM OLD TESTBENCH
@@ -59,7 +60,7 @@ unsigned long int currquant = startquant;
 // using some careful fixed point respresentation and it is highly advised to retain
 // at least 8-12 bits for decimal point to get above rated results.
 
-unsigned long int numsamples = 100;
+unsigned long int numsamples = 50;
 unsigned long int numsamples_tanh;
 unsigned long int numsamples_sig;
 
@@ -67,7 +68,7 @@ unsigned long int sample_width = round((maxquant-startquant)/numsamples);
 																																	
 unsigned long int *samples;													
 
-unsigned long int *result;
+signed long int *result;
 
 unsigned int *tanh_sel;
 
@@ -83,7 +84,7 @@ int main(int argc, char **argv, char **env)
 
 	int samp_len = 0;
 	samples = new unsigned long int [numsamples];
-	result = new unsigned long int [numsamples];
+	result = new signed long int [numsamples];
 	tanh_sel = new unsigned int [numsamples];
 	int ready_in = 1;
 
@@ -104,7 +105,7 @@ int main(int argc, char **argv, char **env)
 				samp_len++;
 
 				//top->tanh_sel_i = rand() % 2;
-				top->tanh_sel_i = 0;
+				top->tanh_sel_i = 1;
 				tanh_sel[i] = top->tanh_sel_i;
 				
 				top->val_i = 1;
@@ -155,9 +156,27 @@ int main(int argc, char **argv, char **env)
 		}
 		samp /= pow(2,precision);
 
-		
 		double obser_value = result[i];
-		std::cout<<"True output: "<<obser_value<<std::endl;
+
+		/*
+		need to interpret binary 2s comp negative value
+		using bitset to apply 2s comp flip to data_o bits,
+		then add 1 and convert back to decimal
+		*/
+		if (tanh_sel[i] && isNeg) {
+    		bitset<32> b(obser_value);
+			for (int i = 0; i < anslen; i++) {
+				b.flip(i);
+			}
+			for (int i = 0; i < anslen; i++) {
+				if (b[i]==0) {
+					b.flip(i);
+					break;
+				}
+				b.flip(i);
+			}
+			obser_value = -1 * b.to_ulong();	
+		}
 		obser_value /= pow(2,precision);
 
 		double ideal_value_tanh = tanh(samp);
@@ -166,7 +185,10 @@ int main(int argc, char **argv, char **env)
 		float err_tanh = 0;
 		float err_sig = 0;
 
-		//error calculation
+		/*
+		error calculation:
+		for values very close to 0, equation will result in 100% error, skewing averages
+		*/
 		if (tanh_sel[i]) {
 			numsamples_tanh++;
 			err_tanh = (ideal_value_tanh - obser_value)/ideal_value_tanh;
@@ -186,11 +208,11 @@ int main(int argc, char **argv, char **env)
 		}
 
 		//print test case information each iteration
-		std::cout<<std::endl;
 		std::cout<<"Input "<<i+1<<" tested for "<<(tanh_sel[i] ? "tanh" : "sigmoid")<<": "<<samp<<std::endl;
 		std::cout<<"Output expected:"<<(tanh_sel[i] ? ideal_value_tanh : ideal_value_sig)<<std::endl;
 		std::cout<<"Output received:"<<obser_value<<std::endl;
 		std::cout<<"Error:"<<(tanh_sel[i] ? err_tanh : err_sig) * 100<<"%"<<std::endl;
+		std::cout<<std::endl;
 	}
 
 	avgerr_tanh /= numsamples_tanh == 0 ? 1 : numsamples_tanh;

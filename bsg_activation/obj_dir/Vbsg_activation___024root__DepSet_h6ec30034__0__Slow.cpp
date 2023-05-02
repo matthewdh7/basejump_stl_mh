@@ -74,8 +74,6 @@ VL_ATTR_COLD void Vbsg_activation___024root___dump_triggers__stl(Vbsg_activation
 }
 #endif  // VL_DEBUG
 
-extern const VlUnpacked<CData/*1:0*/, 512> Vbsg_activation__ConstPool__TABLE_h2e99e467_0;
-
 VL_ATTR_COLD void Vbsg_activation___024root___stl_sequent__TOP__0(Vbsg_activation___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     Vbsg_activation__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -94,7 +92,6 @@ VL_ATTR_COLD void Vbsg_activation___024root___stl_sequent__TOP__0(Vbsg_activatio
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__opA_clr_lo;
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__opB_clr_lo;
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__adder1_cin_lo;
-    SData/*8:0*/ __Vtableidx1;
     VlWide<3>/*95:0*/ __Vtemp_hb427e19b__0;
     VlWide<5>/*159:0*/ __Vtemp_ha1305966__0;
     VlWide<7>/*223:0*/ __Vtemp_hd53f21be__0;
@@ -104,7 +101,7 @@ VL_ATTR_COLD void Vbsg_activation___024root___stl_sequent__TOP__0(Vbsg_activatio
     // Body
     vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__neg_ld = 0U;
     vlSelf->bsg_activation__DOT__divider__DOT__opB_ld_lo = 0U;
-    vlSelf->val_o = (3U == (IData)(vlSelf->bsg_activation__DOT__state_r));
+    vlSelf->val_o = (3U == vlSelf->bsg_activation__DOT__state_r);
     vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__calc_done 
         = (0x30U == (IData)(vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__calc_cnt));
     vlSelf->data_o = vlSelf->bsg_activation__DOT__data_r;
@@ -846,7 +843,7 @@ VL_ATTR_COLD void Vbsg_activation___024root___stl_sequent__TOP__0(Vbsg_activatio
                                                  (~ vlSelf->ang_i))
                                               : vlSelf->ang_i));
     vlSelf->ready_o = ((~ (IData)(vlSelf->bsg_activation__DOT__sinhcosh__DOT__stall_pipe)) 
-                       & (0U == (IData)(vlSelf->bsg_activation__DOT__state_r)));
+                       & (0U == vlSelf->bsg_activation__DOT__state_r));
     if (((((((((0U == (IData)(vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__state)) 
                | (1U == (IData)(vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__state))) 
               | (2U == (IData)(vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__state))) 
@@ -1288,46 +1285,65 @@ VL_ATTR_COLD void Vbsg_activation___024root___stl_sequent__TOP__0(Vbsg_activatio
                                                    VL_SHIFTRS_III(32,32,32, 
                                                                   vlSelf->bsg_activation__DOT__sinhcosh__DOT__x[0x11U], 0xaU)))))) 
                    >> 0x20U));
-    vlSelf->bsg_activation__DOT__bypass = 0U;
+    vlSelf->bsg_activation__DOT__zero_bypass = 0U;
+    vlSelf->bsg_activation__DOT__one_bypass = 0U;
     vlSelf->bsg_activation__DOT__load_ang = 0U;
-    if ((0U == (IData)(vlSelf->bsg_activation__DOT__state_r))) {
+    if ((0U == vlSelf->bsg_activation__DOT__state_r)) {
+        if ((0x14U > vlSelf->bsg_activation__DOT__ang_n)) {
+            vlSelf->bsg_activation__DOT__zero_bypass = 1U;
+        }
         if ((vlSelf->bsg_activation__DOT__ang_n > ((IData)(vlSelf->tanh_sel_i)
                                                     ? 0x3c000U
                                                     : 0x70000U))) {
-            vlSelf->bsg_activation__DOT__bypass = 1U;
+            vlSelf->bsg_activation__DOT__one_bypass = 1U;
         }
+    } else if ((1U != vlSelf->bsg_activation__DOT__state_r)) {
+        vlSelf->bsg_activation__DOT__zero_bypass = 0U;
+        vlSelf->bsg_activation__DOT__one_bypass = 0U;
+    }
+    vlSelf->bsg_activation__DOT__data_n = ((IData)(vlSelf->bsg_activation__DOT__zero_bypass)
+                                            ? 0U : 
+                                           (((1U <= (IData)(
+                                                            (vlSelf->bsg_activation__DOT__divider__DOT__opC_reg__DOT__data_r 
+                                                             >> 0x10U))) 
+                                             | (IData)(vlSelf->bsg_activation__DOT__one_bypass))
+                                             ? 0x10000U
+                                             : (IData)(vlSelf->bsg_activation__DOT__divider__DOT__opC_reg__DOT__data_r)));
+    vlSelf->bsg_activation__DOT__state_n = vlSelf->bsg_activation__DOT__state_r;
+    if ((0U == vlSelf->bsg_activation__DOT__state_r)) {
         if (((IData)(vlSelf->val_i) & (IData)(vlSelf->ready_o))) {
             vlSelf->bsg_activation__DOT__load_ang = 1U;
         }
-    } else if ((1U != (IData)(vlSelf->bsg_activation__DOT__state_r))) {
-        vlSelf->bsg_activation__DOT__bypass = 0U;
-        vlSelf->bsg_activation__DOT__load_ang = 0U;
+        if (((IData)(vlSelf->ready_o) & (IData)(vlSelf->val_i))) {
+            vlSelf->bsg_activation__DOT__state_n = 
+                (((IData)(vlSelf->bsg_activation__DOT__one_bypass) 
+                  | (IData)(vlSelf->bsg_activation__DOT__zero_bypass))
+                  ? 3U : 1U);
+        }
+    } else {
+        if ((1U != vlSelf->bsg_activation__DOT__state_r)) {
+            vlSelf->bsg_activation__DOT__load_ang = 0U;
+        }
+        if ((1U == vlSelf->bsg_activation__DOT__state_r)) {
+            if (((vlSelf->bsg_activation__DOT__sinhcosh__DOT__val 
+                  >> 0x14U) & (0U == (IData)(vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__state)))) {
+                vlSelf->bsg_activation__DOT__state_n = 2U;
+            }
+        } else if ((2U == vlSelf->bsg_activation__DOT__state_r)) {
+            if ((8U == (IData)(vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__state))) {
+                vlSelf->bsg_activation__DOT__state_n = 3U;
+            }
+        } else if ((3U == vlSelf->bsg_activation__DOT__state_r)) {
+            if (vlSelf->ready_i) {
+                vlSelf->bsg_activation__DOT__state_n = 0U;
+            }
+        } else {
+            vlSelf->bsg_activation__DOT__state_n = 0U;
+        }
     }
-    vlSelf->bsg_activation__DOT__data_n = (((1U <= (IData)(
-                                                           (vlSelf->bsg_activation__DOT__divider__DOT__opC_reg__DOT__data_r 
-                                                            >> 0x10U))) 
-                                            | (IData)(vlSelf->bsg_activation__DOT__bypass))
-                                            ? 0x10000U
-                                            : (IData)(vlSelf->bsg_activation__DOT__divider__DOT__opC_reg__DOT__data_r));
-    __Vtableidx1 = (((IData)(vlSelf->bsg_activation__DOT__bypass) 
-                     << 8U) | (((IData)(vlSelf->val_i) 
-                                << 7U) | (((IData)(vlSelf->ready_o) 
-                                           << 6U) | 
-                                          (((0U == (IData)(vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__state)) 
-                                            << 5U) 
-                                           | ((0x10U 
-                                               & (vlSelf->bsg_activation__DOT__sinhcosh__DOT__val 
-                                                  >> 0x10U)) 
-                                              | (((8U 
-                                                   == (IData)(vlSelf->bsg_activation__DOT__divider__DOT__control__DOT__state)) 
-                                                  << 3U) 
-                                                 | (((IData)(vlSelf->ready_i) 
-                                                     << 2U) 
-                                                    | (IData)(vlSelf->bsg_activation__DOT__state_r))))))));
-    vlSelf->bsg_activation__DOT__state_n = Vbsg_activation__ConstPool__TABLE_h2e99e467_0
-        [__Vtableidx1];
-    bsg_activation__DOT__divider_v_i = ((~ (IData)(vlSelf->bsg_activation__DOT__bypass)) 
-                                        & (2U == (IData)(vlSelf->bsg_activation__DOT__state_r)));
+    bsg_activation__DOT__divider_v_i = ((~ (IData)(vlSelf->bsg_activation__DOT__one_bypass)) 
+                                        & ((~ (IData)(vlSelf->bsg_activation__DOT__zero_bypass)) 
+                                           & (2U == vlSelf->bsg_activation__DOT__state_r)));
     vlSelf->bsg_activation__DOT__divider__DOT__latch_signed_div_lo = 0U;
     vlSelf->bsg_activation__DOT__divider__DOT__opC_ld_lo = 0U;
     vlSelf->bsg_activation__DOT__divider__DOT__opA_sel_lo = 0U;
@@ -1512,10 +1528,11 @@ VL_ATTR_COLD void Vbsg_activation___024root___ctor_var_reset(Vbsg_activation___0
     vlSelf->bsg_activation__DOT__data_n = VL_RAND_RESET_I(32);
     vlSelf->bsg_activation__DOT__dividend_li = VL_RAND_RESET_Q(48);
     vlSelf->bsg_activation__DOT__divisor_li = VL_RAND_RESET_Q(48);
-    vlSelf->bsg_activation__DOT__bypass = VL_RAND_RESET_I(1);
+    vlSelf->bsg_activation__DOT__one_bypass = VL_RAND_RESET_I(1);
     vlSelf->bsg_activation__DOT__load_ang = VL_RAND_RESET_I(1);
-    vlSelf->bsg_activation__DOT__state_r = VL_RAND_RESET_I(2);
-    vlSelf->bsg_activation__DOT__state_n = VL_RAND_RESET_I(2);
+    vlSelf->bsg_activation__DOT__zero_bypass = VL_RAND_RESET_I(1);
+    vlSelf->bsg_activation__DOT__state_r = 0;
+    vlSelf->bsg_activation__DOT__state_n = 0;
     VL_RAND_RESET_W(672, vlSelf->bsg_activation__DOT__sinhcosh__DOT__x);
     VL_RAND_RESET_W(672, vlSelf->bsg_activation__DOT__sinhcosh__DOT__y);
     VL_RAND_RESET_W(441, vlSelf->bsg_activation__DOT__sinhcosh__DOT__ang);

@@ -31,7 +31,6 @@ VM_CLASSES_FAST += \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
-	Vbsg_activation__ConstPool_0 \
 	Vbsg_activation___024root__Slow \
 	Vbsg_activation___024root__DepSet_hf8a4972a__0__Slow \
 	Vbsg_activation___024root__DepSet_h6ec30034__0__Slow \

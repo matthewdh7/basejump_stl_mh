@@ -50,7 +50,7 @@ double maxquant = theta_final*pow(2,precision);
 // iterations.
 									  
 //unsigned long int startquant = pow(2,startquant_pow);
-unsigned long int startquant = 2096152;
+unsigned long int startquant = 1;
 
 // The starting quantity is a very important parameter of testing. Due to truncation effect
 // the sense of magnitude of smaller numbers is lost and results in high error. The starting quantity can be
@@ -206,10 +206,10 @@ int main(int argc, char **argv, char **env)
 		std::cout<<"Minimum Vector tested:"<<startquant_print<<std::endl;
 		std::cout<<"Maximum Vector tested:"<<maxquant<<std::endl;
 		std::cout<<"Sampling Interval:"<<sample_width<<std::endl;
-		std::cout<<"Maximum Error in Hyperbolic Sine:"<<maxerr_sinh<<"%"<<std::endl;
+		std::cout<<"Maximum Error in Hyperbolic Sine:"<<maxerr_sinh<<std::endl;
 		std::cout<<"Standard Deviation observed:"<<stan_dev_sinh<<std::endl;
 		std::cout<<"Maximum Error Vector:"<<max_err_samp_sinh<<std::endl;
-		std::cout<<"Maximum Error in Hyperbolic Cosine:"<<maxerr_cosh<<"%"<<std::endl;
+		std::cout<<"Maximum Error in Hyperbolic Cosine:"<<maxerr_cosh<<std::endl;
 		std::cout<<"Standard Deviation observed:"<<stan_dev_cosh<<std::endl;
 		std::cout<<"Maximum Error Vector:"<<max_err_samp_cosh<<std::endl;
 

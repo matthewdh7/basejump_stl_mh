@@ -20,10 +20,9 @@ class Vbsg_activation___024root final : public VerilatedModule {
     VL_IN8(tanh_sel_i,0,0);
     VL_OUT8(ready_o,0,0);
     VL_OUT8(val_o,0,0);
-    CData/*0:0*/ bsg_activation__DOT__bypass;
+    CData/*0:0*/ bsg_activation__DOT__one_bypass;
     CData/*0:0*/ bsg_activation__DOT__load_ang;
-    CData/*1:0*/ bsg_activation__DOT__state_r;
-    CData/*1:0*/ bsg_activation__DOT__state_n;
+    CData/*0:0*/ bsg_activation__DOT__zero_bypass;
     CData/*0:0*/ bsg_activation__DOT__sinhcosh__DOT__stall_pipe;
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__latch_signed_div_lo;
     CData/*1:0*/ bsg_activation__DOT__divider__DOT__opA_sel_lo;
@@ -51,6 +50,8 @@ class Vbsg_activation___024root final : public VerilatedModule {
     IData/*31:0*/ bsg_activation__DOT__negExp;
     IData/*31:0*/ bsg_activation__DOT__data_r;
     IData/*31:0*/ bsg_activation__DOT__data_n;
+    IData/*31:0*/ bsg_activation__DOT__state_r;
+    IData/*31:0*/ bsg_activation__DOT__state_n;
     VlWide<21>/*671:0*/ bsg_activation__DOT__sinhcosh__DOT__x;
     VlWide<21>/*671:0*/ bsg_activation__DOT__sinhcosh__DOT__y;
     VlWide<14>/*440:0*/ bsg_activation__DOT__sinhcosh__DOT__ang;

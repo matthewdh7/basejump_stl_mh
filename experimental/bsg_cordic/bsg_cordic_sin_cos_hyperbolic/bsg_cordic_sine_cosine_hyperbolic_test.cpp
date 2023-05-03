@@ -42,7 +42,8 @@ double theta_max_compute(int negprec, int posiprec)
 
 double theta_final = theta_max_compute(negprec, posiprec);
 
-double maxquant = theta_final*pow(2,precision); 
+//double maxquant = theta_final*pow(2,precision); 
+double maxquant = 2;
 
 // The maximum quantity is determined by the angle that can be accumulated
 // by the negative and positive iterations. Please refer to the table mentioned
@@ -50,7 +51,7 @@ double maxquant = theta_final*pow(2,precision);
 // iterations.
 									  
 //unsigned long int startquant = pow(2,startquant_pow);
-unsigned long int startquant = 1;
+unsigned long int startquant = 0;
 
 // The starting quantity is a very important parameter of testing. Due to truncation effect
 // the sense of magnitude of smaller numbers is lost and results in high error. The starting quantity can be
@@ -62,7 +63,7 @@ unsigned long int startquant = 1;
 // at least 8-12 bits for decimal point to get above rated results.
 
 // unsigned long int numsamples = (pow(2,anglen-1)-1);
-unsigned long int numsamples = 1;
+unsigned long int numsamples = 2;
 
 // While testing please be very careful of the number of samples. Sometimes the
 // anglen can make the sample_width = 0 which will definitely result in unnecessary

@@ -14,7 +14,7 @@ class Vbsg_activation__Syms;
 class Vbsg_activation___024root;
 
 // This class is the main interface to the Verilated model
-class Vbsg_activation VL_NOT_FINAL : public VerilatedModel {
+class Vbsg_activation VL_NOT_FINAL {
   private:
     // Symbol table holding complete model state (owned by this class)
     Vbsg_activation__Syms* const vlSymsp;
@@ -65,17 +65,11 @@ class Vbsg_activation VL_NOT_FINAL : public VerilatedModel {
     void eval_end_step() {}
     /// Simulation complete, run final blocks.  Application must call on completion.
     void final();
-    /// Are there scheduled events to handle?
-    bool eventsPending();
-    /// Returns time at next time slot. Aborts if !eventsPending()
-    uint64_t nextTimeSlot();
+    /// Return current simulation context for this model.
+    /// Used to get to e.g. simulation time via contextp()->time()
+    VerilatedContext* contextp() const;
     /// Retrieve name of this model instance (as passed to constructor).
     const char* name() const;
-
-    // Abstract methods from VerilatedModel
-    const char* hierName() const override final;
-    const char* modelName() const override final;
-    unsigned threads() const override final;
 } VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
 
 #endif  // guard

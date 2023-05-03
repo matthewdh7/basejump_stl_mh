@@ -42,14 +42,16 @@ double theta_max_compute(int negprec, int posiprec)
 
 double theta_final = theta_max_compute(negprec, posiprec);
 
-double maxquant = theta_final*pow(2,precision); 
+//double maxquant = theta_final*pow(2,precision); 
+double maxquant = 2;
 
 // The maximum quantity is determined by the angle that can be accumulated
 // by the negative and positive iterations. Please refer to the table mentioned
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
-unsigned long int startquant = pow(2,startquant_pow);
+//unsigned long int startquant = pow(2,startquant_pow);
+unsigned long int startquant = 0;
 
 // The starting quantity is a very important parameter of testing. Due to truncation effect
 // the sense of magnitude of smaller numbers is lost and results in high error. The starting quantity can be
@@ -60,7 +62,8 @@ unsigned long int startquant = pow(2,startquant_pow);
 // using some careful fixed point respresentation and it is highly advised to retain
 // at least 8-12 bits for decimal point to get above rated results.
 
-unsigned long int numsamples = (pow(2,anglen-1)-1);
+// unsigned long int numsamples = (pow(2,anglen-1)-1);
+unsigned long int numsamples = 2;
 
 // While testing please be very careful of the number of samples. Sometimes the
 // anglen can make the sample_width = 0 which will definitely result in unnecessary
@@ -110,18 +113,17 @@ int main(int argc, char **argv, char **env)
 
 			if((main_time%10)==0){
 
-				if(startquant<maxquant){
+				//if(startquant<maxquant){
 				top->ang_i = startquant;
 				samples[i] = startquant;
 				samp_len++;
-				}
+				//}
 
 				top->val_i = valid_in;
 				top->ready_i = ready_in;
 				top->clk_i = 1;
-				result_sinh[i] = top->sinh_o;
-				result_cosh[i] = top->cosh_o;
-				startquant+=sample_width;
+			
+				//startquant+=sample_width;
 				int val_i = top->val_i;
 				int val_o = top->val_o;
 				int ready_i = top->ready_i;
@@ -137,7 +139,10 @@ int main(int argc, char **argv, char **env)
 			main_time++;
 			
 		}
-
+		if (top->val_o) {
+			result_sinh[i] = top->sinh_o;
+			result_cosh[i] = top->cosh_o;
+		}
 		main_time = 0;
 	}	
 
@@ -154,15 +159,24 @@ int main(int argc, char **argv, char **env)
 
 	for(int i=0;i<samp_len;i++){
 		float samp = samples[i]/pow(2,precision);
+		std::cout<<"Input: "<<samp<<std::endl;
 
 		double ideal_value_sinh = sinh(samp);
 		double ideal_value_cosh = cosh(samp);
-
+		
 		double obser_value_sinh = result_sinh[i+(negprec+posiprec+1+2)]/pow(2,precision);
 		double obser_value_cosh = result_cosh[i+(negprec+posiprec+1+2)]/pow(2,precision);
+		std::cout<<"Sinh expected: "<<ideal_value_sinh<<std::endl;
+		std::cout<<"Sinh actual: "<<obser_value_sinh<<std::endl;
+
+		std::cout<<"Cosh expected: "<<ideal_value_cosh<<std::endl;
+		std::cout<<"Cosh actual: "<<obser_value_cosh<<std::endl;
 
 		float err_sinh = (ideal_value_sinh - obser_value_sinh)/ideal_value_sinh;
 		float err_cosh = (ideal_value_cosh - obser_value_sinh)/ideal_value_cosh;
+		std::cout<<"Sinh error: "<<err_sinh<<std::endl;
+		std::cout<<"Cosh error: "<<err_cosh<<std::endl;
+		std::cout<<std::endl;
 
 		double sinh_err = err_sinh*err_sinh;
 		double cosh_err = err_cosh*err_cosh;
@@ -193,10 +207,10 @@ int main(int argc, char **argv, char **env)
 		std::cout<<"Minimum Vector tested:"<<startquant_print<<std::endl;
 		std::cout<<"Maximum Vector tested:"<<maxquant<<std::endl;
 		std::cout<<"Sampling Interval:"<<sample_width<<std::endl;
-		std::cout<<"Maximum Error in Hyperbolic Sine:"<<maxerr_sinh<<"%"<<std::endl;
+		std::cout<<"Maximum Error in Hyperbolic Sine:"<<maxerr_sinh<<std::endl;
 		std::cout<<"Standard Deviation observed:"<<stan_dev_sinh<<std::endl;
 		std::cout<<"Maximum Error Vector:"<<max_err_samp_sinh<<std::endl;
-		std::cout<<"Maximum Error in Hyperbolic Cosine:"<<maxerr_cosh<<"%"<<std::endl;
+		std::cout<<"Maximum Error in Hyperbolic Cosine:"<<maxerr_cosh<<std::endl;
 		std::cout<<"Standard Deviation observed:"<<stan_dev_cosh<<std::endl;
 		std::cout<<"Maximum Error Vector:"<<max_err_samp_cosh<<std::endl;
 

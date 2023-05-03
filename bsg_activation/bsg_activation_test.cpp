@@ -39,15 +39,15 @@ double theta_max_compute(int negprec, int posiprec)
 
 double theta_final = theta_max_compute(negprec, posiprec);
 
-//double maxquant = theta_final*pow(2,precision); 
-double maxquant = 100; 
+double maxquant = theta_final*pow(2,precision); 
+//double maxquant = 1000; 
 
 // The maximum quantity is determined by the angle that can be accumulated
 // by the negative and positive iterations. Please refer to the table mentioned
 // in the readme for the maximum angle accumulated by a particular number of
 // iterations.
 									  
-unsigned long int startquant = 0;
+unsigned long int startquant = 500;
 unsigned long int currquant = startquant;
 
 // OLD NOTE FROM OLD TESTBENCH
@@ -60,7 +60,7 @@ unsigned long int currquant = startquant;
 // using some careful fixed point respresentation and it is highly advised to retain
 // at least 8-12 bits for decimal point to get above rated results.
 
-unsigned long int numsamples = 50;
+unsigned long int numsamples = 1000;
 unsigned long int numsamples_tanh;
 unsigned long int numsamples_sig;
 
@@ -104,8 +104,8 @@ int main(int argc, char **argv, char **env)
 				currquant += sample_width;
 				samp_len++;
 
-				//top->tanh_sel_i = rand() % 2;
-				top->tanh_sel_i = 1;
+				top->tanh_sel_i = rand() % 2;
+				//top->tanh_sel_i = 0;
 				tanh_sel[i] = top->tanh_sel_i;
 				
 				top->val_i = 1;

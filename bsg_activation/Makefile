@@ -5,7 +5,7 @@
 .ONESHELL: 
 .PHONY: clean
 
-FILE_DEL = $(VERI_DIR) CORDIC_ACT.vcd params_def.h bsg_activation.v bsg_cordic_sine_cosine_hyperbolic.v bsg_activation_OLD.v
+FILE_DEL = $(VERI_DIR) CORDIC_sinh_cosh.vcd CORDIC_activation.vcd params_def.h bsg_activation.v bsg_cordic_sine_cosine_hyperbolic.v bsg_activation_OLD.v
 
 #Use 'make clean' to remove the trace and verilated files. Define FILE_DEL variable
 #with files folder to verilated files if not using default 'obj_dir' directory name. 
@@ -26,7 +26,7 @@ VERI_DIR = obj_dir
 TRACE = 0
 # need to add new flags to beginning of list, not end (after --Mdir comes the VERI_DIR path)
 VFLAGS_ACT = -Wall --cc --exe --top-module bsg_activation --Mdir
-VFLAGS_SINCOS = -Wall --cc --exe --top-module bsg_cordic_sine_cosine_hyperbolic --Mdir 
+VFLAGS_SINCOS = -Wall --cc --exe --Mdir 
 
 VLINT_OFF = -Wno-UNUSED
 
@@ -36,7 +36,7 @@ VLINT_OFF = -Wno-UNUSED
 #use VERILATOR_PATH to point to the installed 'verilator' executable.
 #Use 'make run VERILATOR_PATH=where/verilator/is/installed/verilator-'version'/bin/verilator'
 
-VERILATOR_PATH := $$HOME/verilator/install/bin/verilator
+VERILATOR_PATH := verilator
 
 run: $(VERI_DIR)/Vbsg_activation
 	$(VERI_DIR)/Vbsg_activation
@@ -60,9 +60,9 @@ clean:
 
 setup:
 	cd $$HOME/verilator
-	git checkout v5.002
+	git -C $$HOME/verilator checkout v5.002
 	autoconf
-	./configure --prefix=$$PWD/install
+	./configure
 	make -j80
 	make install
 
@@ -95,4 +95,4 @@ $(GENERATED_VERILOG_FILE_SINCOS):
 # source /opt/rh/devtoolset-11/enable
 # export VERILATOR_ROOT=$HOME/verilator
 # export PATH=$PATH:$VERILATOR_ROOT/bin
-# $HOME/verilator/install/bin/verilator -Wall --cc --build bsg_activation_test2.cpp --top-module bsg_activation --Mdir obj_dir bsg_activation.v   -Wno-UNUSED
+# ./configure --prefix=$$PWD/install

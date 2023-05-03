@@ -9,16 +9,16 @@
 
 void Vbsg_activation___024root___ctor_var_reset(Vbsg_activation___024root* vlSelf);
 
-Vbsg_activation___024root::Vbsg_activation___024root(Vbsg_activation__Syms* symsp, const char* name)
-    : VerilatedModule{name}
-    , vlSymsp{symsp}
+Vbsg_activation___024root::Vbsg_activation___024root(const char* _vcname__)
+    : VerilatedModule(_vcname__)
  {
     // Reset structure values
     Vbsg_activation___024root___ctor_var_reset(this);
 }
 
-void Vbsg_activation___024root::__Vconfigure(bool first) {
+void Vbsg_activation___024root::__Vconfigure(Vbsg_activation__Syms* _vlSymsp, bool first) {
     if (false && first) {}  // Prevent unused
+    this->vlSymsp = _vlSymsp;
 }
 
 Vbsg_activation___024root::~Vbsg_activation___024root() {

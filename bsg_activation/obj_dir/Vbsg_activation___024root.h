@@ -8,8 +8,7 @@
 #include "verilated.h"
 
 class Vbsg_activation__Syms;
-
-class Vbsg_activation___024root final : public VerilatedModule {
+VL_MODULE(Vbsg_activation___024root) {
   public:
 
     // DESIGN SPECIFIC STATE
@@ -25,9 +24,6 @@ class Vbsg_activation___024root final : public VerilatedModule {
     CData/*0:0*/ bsg_activation__DOT__zero_bypass;
     CData/*0:0*/ bsg_activation__DOT__sinhcosh__DOT__stall_pipe;
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__latch_signed_div_lo;
-    CData/*1:0*/ bsg_activation__DOT__divider__DOT__opA_sel_lo;
-    CData/*2:0*/ bsg_activation__DOT__divider__DOT__opB_sel_lo;
-    CData/*2:0*/ bsg_activation__DOT__divider__DOT__opC_sel_lo;
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__opA_ld_lo;
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__opB_ld_lo;
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__opC_ld_lo;
@@ -41,8 +37,7 @@ class Vbsg_activation___024root final : public VerilatedModule {
     CData/*5:0*/ bsg_activation__DOT__divider__DOT__control__DOT__calc_cnt;
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__control__DOT__calc_up_li;
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__control__DOT__calc_done;
-    CData/*0:0*/ __Vtrigrprev__TOP__clk_i;
-    CData/*0:0*/ __VactContinue;
+    CData/*0:0*/ __Vclklast__TOP__clk_i;
     VL_IN(ang_i,20,0);
     VL_OUT(data_o,31,0);
     IData/*20:0*/ bsg_activation__DOT__ang_n;
@@ -60,31 +55,27 @@ class Vbsg_activation___024root final : public VerilatedModule {
     VlWide<20>/*639:0*/ bsg_activation__DOT__sinhcosh__DOT__y_ans;
     VlWide<14>/*419:0*/ bsg_activation__DOT__sinhcosh__DOT__ang_ans;
     IData/*19:0*/ bsg_activation__DOT__sinhcosh__DOT__val_ans;
-    IData/*31:0*/ __VstlIterCount;
-    IData/*31:0*/ __VicoIterCount;
-    IData/*31:0*/ __VactIterCount;
-    QData/*47:0*/ bsg_activation__DOT__dividend_li;
-    QData/*47:0*/ bsg_activation__DOT__divisor_li;
+    QData/*48:0*/ bsg_activation__DOT__divider__DOT__opA_mux;
     QData/*48:0*/ bsg_activation__DOT__divider__DOT__add1_out;
+    QData/*48:0*/ bsg_activation__DOT__divider__DOT__opB_mux;
+    QData/*48:0*/ bsg_activation__DOT__divider__DOT__opC_mux;
+    VlWide<4>/*97:0*/ bsg_activation__DOT__divider__DOT__muxA__DOT__data_masked;
     QData/*48:0*/ bsg_activation__DOT__divider__DOT__opA_reg__DOT__data_r;
     QData/*48:0*/ bsg_activation__DOT__divider__DOT__opB_reg__DOT__data_r;
     QData/*48:0*/ bsg_activation__DOT__divider__DOT__opC_reg__DOT__data_r;
-    QData/*48:0*/ bsg_activation__DOT__divider__DOT__genblk1__DOT__muxC__DOT____VdfgTmp_ha3a8a75d__0;
-    VlTriggerVec<1> __VstlTriggered;
-    VlTriggerVec<1> __VicoTriggered;
-    VlTriggerVec<1> __VactTriggered;
-    VlTriggerVec<1> __VnbaTriggered;
+    VlWide<5>/*146:0*/ bsg_activation__DOT__divider__DOT__genblk1__DOT__muxB__DOT__data_masked;
+    VlWide<5>/*146:0*/ bsg_activation__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked;
 
     // INTERNAL VARIABLES
-    Vbsg_activation__Syms* const vlSymsp;
+    Vbsg_activation__Syms* vlSymsp;  // Symbol table
 
     // CONSTRUCTORS
-    Vbsg_activation___024root(Vbsg_activation__Syms* symsp, const char* name);
+    Vbsg_activation___024root(const char* name);
     ~Vbsg_activation___024root();
     VL_UNCOPYABLE(Vbsg_activation___024root);
 
     // INTERNAL METHODS
-    void __Vconfigure(bool first);
+    void __Vconfigure(Vbsg_activation__Syms* symsp, bool first);
 } VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
 
 

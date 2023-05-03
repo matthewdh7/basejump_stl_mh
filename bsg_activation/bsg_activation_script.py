@@ -106,6 +106,7 @@ def main_body_print():
 
     /* bypass sincos/divider if needed */
     assign sincos_v_i = (state_r == e_SINCOS) && ~one_bypass && ~zero_bypass;
+    //assign sincos_v_i = 1;
     assign divider_v_i = (state_r == e_DIVIDE) && ~one_bypass && ~zero_bypass;
 
     /* input register */

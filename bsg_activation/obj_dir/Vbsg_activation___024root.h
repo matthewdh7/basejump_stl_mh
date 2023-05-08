@@ -39,12 +39,12 @@ VL_MODULE(Vbsg_activation___024root) {
     CData/*0:0*/ bsg_activation__DOT__divider__DOT__control__DOT__calc_done;
     CData/*0:0*/ __Vclklast__TOP__clk_i;
     VL_IN(ang_i,20,0);
-    VL_OUT(data_o,31,0);
+    VL_OUT(data_o,16,0);
     IData/*20:0*/ bsg_activation__DOT__ang_n;
     IData/*20:0*/ bsg_activation__DOT__ang_r;
-    IData/*31:0*/ bsg_activation__DOT__negExp;
-    IData/*31:0*/ bsg_activation__DOT__data_r;
-    IData/*31:0*/ bsg_activation__DOT__data_n;
+    IData/*19:0*/ bsg_activation__DOT__negExp;
+    IData/*16:0*/ bsg_activation__DOT__data_r;
+    IData/*16:0*/ bsg_activation__DOT__data_n;
     IData/*31:0*/ bsg_activation__DOT__state_r;
     IData/*31:0*/ bsg_activation__DOT__state_n;
     VlWide<21>/*671:0*/ bsg_activation__DOT__sinhcosh__DOT__x;
@@ -55,16 +55,16 @@ VL_MODULE(Vbsg_activation___024root) {
     VlWide<20>/*639:0*/ bsg_activation__DOT__sinhcosh__DOT__y_ans;
     VlWide<14>/*419:0*/ bsg_activation__DOT__sinhcosh__DOT__ang_ans;
     IData/*19:0*/ bsg_activation__DOT__sinhcosh__DOT__val_ans;
-    QData/*48:0*/ bsg_activation__DOT__divider__DOT__opA_mux;
-    QData/*48:0*/ bsg_activation__DOT__divider__DOT__add1_out;
-    QData/*48:0*/ bsg_activation__DOT__divider__DOT__opB_mux;
-    QData/*48:0*/ bsg_activation__DOT__divider__DOT__opC_mux;
-    VlWide<4>/*97:0*/ bsg_activation__DOT__divider__DOT__muxA__DOT__data_masked;
-    QData/*48:0*/ bsg_activation__DOT__divider__DOT__opA_reg__DOT__data_r;
-    QData/*48:0*/ bsg_activation__DOT__divider__DOT__opB_reg__DOT__data_r;
-    QData/*48:0*/ bsg_activation__DOT__divider__DOT__opC_reg__DOT__data_r;
-    VlWide<5>/*146:0*/ bsg_activation__DOT__divider__DOT__genblk1__DOT__muxB__DOT__data_masked;
-    VlWide<5>/*146:0*/ bsg_activation__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked;
+    QData/*36:0*/ bsg_activation__DOT__divider__DOT__opA_mux;
+    QData/*36:0*/ bsg_activation__DOT__divider__DOT__add1_out;
+    QData/*36:0*/ bsg_activation__DOT__divider__DOT__opB_mux;
+    QData/*36:0*/ bsg_activation__DOT__divider__DOT__opC_mux;
+    VlWide<3>/*73:0*/ bsg_activation__DOT__divider__DOT__muxA__DOT__data_masked;
+    QData/*36:0*/ bsg_activation__DOT__divider__DOT__opA_reg__DOT__data_r;
+    QData/*36:0*/ bsg_activation__DOT__divider__DOT__opB_reg__DOT__data_r;
+    QData/*36:0*/ bsg_activation__DOT__divider__DOT__opC_reg__DOT__data_r;
+    VlWide<4>/*110:0*/ bsg_activation__DOT__divider__DOT__genblk1__DOT__muxB__DOT__data_masked;
+    VlWide<4>/*110:0*/ bsg_activation__DOT__divider__DOT__genblk1__DOT__muxC__DOT__data_masked;
 
     // INTERNAL VARIABLES
     Vbsg_activation__Syms* vlSymsp;  // Symbol table

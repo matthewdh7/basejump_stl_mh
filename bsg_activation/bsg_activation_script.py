@@ -15,9 +15,9 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
     /* verilator lint_on CASEINCOMPLETE */
 
     module bsg_activation #(parameter 
-         ans_width_p = %(s)d
-        ,ang_width_p = %(g)d
-        ,precision = %(c)d
+         cordic_width_p = 32   //only affects sincos/divider calculations, not final data
+        ,ang_width_p = 21
+        ,precision = 16     //affects precision of intermediate calculations and final data
         /*
         THRESHOLD PARAMETERS: Input as an 8 bit binary value, xxxx.xxxx ; if the
         input angle is greater than this value, the module will output 1 and bypass
@@ -32,17 +32,23 @@ def bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extrite
     ,input val_i
     ,input reset_i
     ,input tanh_sel_i
-    ,output signed [ans_width_p-1:0] data_o
+    ,output signed [precision:0] data_o
     ,output ready_o
     ,output val_o
     );
 
-    parameter SHFT_AMT = %(c)d;
+    parameter SHFT_AMT = 16;
+    parameter ans_width = precision+1; //default 17
+    parameter internal_width = precision+4; //default 20
     parameter [ang_width_p-1:0] ZERO_THRESH = (ang_width_p)'('h14); //decided through testing
 
     logic signed [ang_width_p-1:0] ang_n, ang_r;
-    logic signed [ans_width_p-1:0] sinh_lo, cosh_lo, negExp, data_r, data_n; //negExp = e^-x
-    logic signed [ans_width_p+SHFT_AMT-1:0] dividend_li, divisor_li, remainder_lo, divider_lo;    //larger signals to account for shifting
+    logic signed [cordic_width_p-1:0] sinh_lo, cosh_lo; 
+    logic signed [internal_width-1:0] sinh, cosh, negExp; //negExp = e^-x
+    logic signed [ans_width-1:0] data_r, data_n; 
+
+    logic signed [internal_width+SHFT_AMT-1:0] dividend_li, divisor_li, remainder_lo, divider_lo;    //larger signals to account for shifting
+
     logic sincos_v_i, sincos_ready_o, sincos_v_o, divider_v_i, divider_ready_o, divider_v_o; //handshake signals
     logic one_bypass, load_ang, divider_sel, zero_bypass; //control signals
 
@@ -121,7 +127,7 @@ def main_body_print():
     end
 
     /* sinh cosh module */
-    bsg_cordic_sine_cosine_hyperbolic #(.neg_prec_p(%(n)d), .posi_prec_p(%(p)d), .extr_iter_p(1), .ans_width_p, .ang_width_p) sinhcosh
+    bsg_cordic_sine_cosine_hyperbolic #(.neg_prec_p(6), .posi_prec_p(12), .extr_iter_p(1), .ans_width_p(cordic_width_p), .ang_width_p) sinhcosh
     (.clk_i
     ,.ang_i     (ang_r)
     ,.ready_i   (divider_ready_o)
@@ -131,18 +137,20 @@ def main_body_print():
     ,.ready_o   (sincos_ready_o)
     ,.val_o     (sincos_v_o)
     );
-
-    assign negExp = cosh_lo - sinh_lo;
+    //default 20 bits (16 decimal, 4 integer)
+    assign sinh = sinh_lo[internal_width-1:0];
+    assign cosh = cosh_lo[internal_width-1:0];
+    assign negExp = cosh - sinh;
     /* tan divider unit */
     /*
     format: tanh_sel_i (high is for tanh, low is for sigmoid)
         first term: numerator (sinh for tanh, 1 for sigmoid)
         second term: denominator (cosh for tanh, 1 + e^-x for sigmoid)
     */
-    assign dividend_li = tanh_sel_i ? {SHFT_AMT'('d0), sinh_lo} << SHFT_AMT : {(ans_width_p-1)'('d0), 1'b1, SHFT_AMT'('d0)} << SHFT_AMT;
-    assign divisor_li = tanh_sel_i ? {SHFT_AMT'('d0), cosh_lo} : {SHFT_AMT'('d0), negExp[ans_width_p-1:SHFT_AMT] + 1'b1, negExp[SHFT_AMT-1:0]};
+    assign dividend_li = tanh_sel_i ? {SHFT_AMT'('d0), sinh} << SHFT_AMT : {(internal_width-1)'('d0), 1'b1, precision'('d0)} << SHFT_AMT;
+    assign divisor_li = tanh_sel_i ? {SHFT_AMT'('d0), cosh} : {SHFT_AMT'('d0), negExp[internal_width-1:SHFT_AMT] + 1'b1, negExp[SHFT_AMT-1:0]};
 
-    bsg_idiv_iterative #(.width_p(ans_width_p+SHFT_AMT)) divider
+    bsg_idiv_iterative #(.width_p(internal_width+SHFT_AMT)) divider
     (.clk_i
     ,.reset_i       
 
@@ -160,20 +168,20 @@ def main_body_print():
     );
 
     //this value is equal to 1 in the fixed point notation, determined by shftamt and ans_width:
-    // {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}}
+    // {{cordic_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}}
     
     /* outbound signals */
     always_comb begin
         //if value of output exceeds 1 (decimal) then hard set to 1, otherwise keep normal output
         if (zero_bypass) data_n = 'd0;
-        else if (divider_lo[ans_width_p+SHFT_AMT-1:SHFT_AMT] >= 'd1 || one_bypass)    data_n = {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}};
-        else             data_n = divider_lo[ans_width_p-1:0];
+        else if (divider_lo[internal_width-1:precision] >= 'd1 || one_bypass)    data_n = {1'b1, {precision{1'b0}}};
+        else             data_n = divider_lo[ans_width-1:0];
     end
 
     always_ff @(posedge clk_i) begin
         if (divider_v_o || one_bypass || zero_bypass)  begin
             //if sigmoid and negative input, correct by subtracting divider output from 1
-            if (ang_i[ang_width_p-1] && ~tanh_sel_i) data_r <= {{ans_width_p-SHFT_AMT-1{1'b0}}, 1'b1, {SHFT_AMT{1'b0}}} - data_n;
+            if (ang_i[ang_width_p-1] && ~tanh_sel_i) data_r <= {1'b1, {SHFT_AMT{1'b0}}} - data_n;
             //if tanh and negative input, flip back to negative
             else            data_r <= ang_i[ang_width_p-1] ? ~data_n + 1'b1 : data_n;
             end

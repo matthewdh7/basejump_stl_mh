@@ -32,7 +32,7 @@ class Vbsg_activation VL_NOT_FINAL {
     VL_OUT8(&ready_o,0,0);
     VL_OUT8(&val_o,0,0);
     VL_IN(&ang_i,20,0);
-    VL_OUT(&data_o,31,0);
+    VL_OUT(&data_o,16,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.

@@ -13,15 +13,16 @@
 
     module bsg_activation #(parameter 
          cordic_width_p = 32   //only affects sincos/divider calculations, not final data
-        ,ang_width_p = 21
-        ,precision = 16     //affects precision of intermediate calculations and final data
+        ,ang_width_p = 16
+        ,precision = 10     //affects precision of intermediate calculations and final data
         /*
-        THRESHOLD PARAMETERS: Input as an 8 bit binary value, xxxx.xxxx ; if the
+        THRESHOLD PARAMETERS: Input as an 8 bit binary value, xxx.xxxx ; if the
         input angle is greater than this value, the module will output 1 and bypass
         any calculations. Could increase size of parameter to allow more precise threshold.
         */
-        ,parameter [7:0] thresh_tanh_p = 8'b00111100 //3.75 decimal
-        ,parameter [7:0] thresh_sig_p = 8'b01110000 //7.00 decimal
+        ,parameter [6:0] thresh_tanh_p = 7'b0111100 //3.75 decimal
+        ,parameter [6:0] thresh_sig_p = 7'b1110000 //7.00 decimal
+        ,parameter [5:0] thresh_zero_p = 6'b010100 //bottom bits of decimal, depends on precision
     ) (
      input clk_i
     ,input signed [ang_width_p-1:0] ang_i
@@ -34,10 +35,10 @@
     ,output val_o
     );
 
-    parameter SHFT_AMT = 16;
+    parameter SHFT_AMT = precision;
     parameter ans_width = precision+1; //default 17
     parameter internal_width = precision+4; //default 20
-    parameter [ang_width_p-1:0] ZERO_THRESH = (ang_width_p)'('h14); //decided through testing
+    parameter [ang_width_p-1:0] ZERO_THRESH = {(ang_width_p-6)'('d0), thresh_zero_p}; //can be adjusted based on precision chosen
 
     logic signed [ang_width_p-1:0] ang_n, ang_r;
     logic signed [cordic_width_p-1:0] sinh_lo, cosh_lo; 
@@ -49,8 +50,8 @@
     logic sincos_v_i, sincos_ready_o, sincos_v_o, divider_v_i, divider_ready_o, divider_v_o; //handshake signals
     logic one_bypass, load_ang, divider_sel, zero_bypass; //control signals
 
-    wire [ang_width_p-1:0] thresh_tanh = {(ang_width_p-precision-4)'('d0), thresh_tanh_p, (precision-4)'('d0)};
-    wire [ang_width_p-1:0] thresh_sig = {(ang_width_p-precision-4)'('d0), thresh_sig_p, (precision-4)'('d0)};
+    wire [ang_width_p-1:0] thresh_tanh = {(ang_width_p-precision-3)'('d0), thresh_tanh_p, (precision-4)'('d0)};
+    wire [ang_width_p-1:0] thresh_sig = {(ang_width_p-precision-3)'('d0), thresh_sig_p, (precision-4)'('d0)};
     
   
     /* state logic */
@@ -168,6 +169,7 @@
     always_comb begin
         //if value of output exceeds 1 (decimal) then hard set to 1, otherwise keep normal output
         if (zero_bypass) data_n = 'd0;
+        else if (sinh_lo[cordic_width_p-1:precision+4] > 'd0 && tanh_sel_i)      data_n = {1'b1, {precision{1'b0}}};
         else if (divider_lo[internal_width-1:precision] >= 'd1 || one_bypass)    data_n = {1'b1, {precision{1'b0}}};
         else             data_n = divider_lo[ans_width-1:0];
     end

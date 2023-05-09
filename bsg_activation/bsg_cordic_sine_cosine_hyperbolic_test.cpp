@@ -42,8 +42,8 @@ double theta_max_compute(int negprec, int posiprec)
 
 double theta_final = theta_max_compute(negprec, posiprec);
 
-//double maxquant = theta_final*pow(2,precision); 
-double maxquant = 2;
+double maxquant = theta_final*pow(2,precision); 
+
 
 // The maximum quantity is determined by the angle that can be accumulated
 // by the negative and positive iterations. Please refer to the table mentioned
@@ -63,7 +63,7 @@ unsigned long int startquant = 0;
 // at least 8-12 bits for decimal point to get above rated results.
 
 // unsigned long int numsamples = (pow(2,anglen-1)-1);
-unsigned long int numsamples = 2;
+unsigned long int numsamples = 100;
 
 // While testing please be very careful of the number of samples. Sometimes the
 // anglen can make the sample_width = 0 which will definitely result in unnecessary
@@ -123,7 +123,7 @@ int main(int argc, char **argv, char **env)
 				top->ready_i = ready_in;
 				top->clk_i = 1;
 			
-				//startquant+=sample_width;
+				startquant+=sample_width;
 				int val_i = top->val_i;
 				int val_o = top->val_o;
 				int ready_i = top->ready_i;

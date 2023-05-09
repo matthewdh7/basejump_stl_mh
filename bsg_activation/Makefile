@@ -5,6 +5,14 @@
 .ONESHELL: 
 .PHONY: clean
 
+# parameters set here for both sincos and top level:
+angbitlen = 16
+ansbitlen = 32
+negprec = 6
+posprec = 8
+precision = 10
+startquantpow = 4
+
 FILE_DEL = $(VERI_DIR) CORDIC_sinh_cosh.vcd CORDIC_activation.vcd params_def.h bsg_activation.v bsg_cordic_sine_cosine_hyperbolic.v bsg_activation_OLD.v
 
 #Use 'make clean' to remove the trace and verilated files. Define FILE_DEL variable
@@ -53,7 +61,7 @@ $(VERI_DIR)/Vbsg_activation: Vbsg_activation.mk
 # parameter format in this makefile: angbitlen, ansbitlen, negprec, posprec, precision, startquantpow (unused now)
 $(GENERATED_VERILOG_FILE_ACT):
 		echo -n > $(GENERATED_VERILOG_FILE_ACT)
-		python3 bsg_activation_script.py 21 32 6 12 16 4 > $(GENERATED_VERILOG_FILE_ACT)
+		python3 bsg_activation_script.py $(angbitlen) $(ansbitlen) $(negprec) $(posprec) $(precision) $(startquantpow) > $(GENERATED_VERILOG_FILE_ACT)
 
 clean:
 		rm -rf $(FILE_DEL)
@@ -89,7 +97,7 @@ $(VERI_DIR)/Vbsg_cordic_sine_cosine_hyperbolic: Vbsg_cordic_sine_cosine_hyperbol
 
 $(GENERATED_VERILOG_FILE_SINCOS):
 		echo -n > $(GENERATED_VERILOG_FILE_SINCOS)
-		python3 bsg_sine_cosine_hyperbolic_script.py 21 32 6 12 16 4 > $(GENERATED_VERILOG_FILE_SINCOS)
+		python3 bsg_sine_cosine_hyperbolic_script.py $(angbitlen) $(ansbitlen) $(negprec) $(posprec) $(precision) $(startquantpow) > $(GENERATED_VERILOG_FILE_SINCOS)
 
 # random garbage testing stuff
 # source /opt/rh/devtoolset-11/enable

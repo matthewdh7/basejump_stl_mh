@@ -19,17 +19,17 @@ VL_MODULE(Vbsg_cordic_sine_cosine_hyperbolic___024root) {
     VL_OUT8(val_o,0,0);
     CData/*0:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__stall_pipe;
     CData/*0:0*/ __Vclklast__TOP__clk_i;
-    VL_IN(ang_i,20,0);
+    VL_IN16(ang_i,15,0);
+    VlWide<9>/*271:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__ang;
+    VlWide<8>/*255:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__ang_ans;
+    SData/*15:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__val_ans;
     VL_OUT(sinh_o,31,0);
     VL_OUT(cosh_o,31,0);
-    VlWide<21>/*671:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__x;
-    VlWide<21>/*671:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__y;
-    VlWide<14>/*440:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__ang;
-    IData/*20:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__val;
-    VlWide<20>/*639:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__x_ans;
-    VlWide<20>/*639:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__y_ans;
-    VlWide<14>/*419:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__ang_ans;
-    IData/*19:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__val_ans;
+    VlWide<17>/*543:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__x;
+    VlWide<17>/*543:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__y;
+    IData/*16:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__val;
+    VlWide<16>/*511:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__x_ans;
+    VlWide<16>/*511:0*/ bsg_cordic_sine_cosine_hyperbolic__DOT__y_ans;
 
     // INTERNAL VARIABLES
     Vbsg_cordic_sine_cosine_hyperbolic__Syms* vlSymsp;  // Symbol table

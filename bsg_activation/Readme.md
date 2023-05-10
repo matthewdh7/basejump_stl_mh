@@ -24,6 +24,7 @@ you can simple do `make run`. Note that devtoolset-11 needs to be enabled for th
 
 ### Script Information
 The file bsg_activation_test.cpp contains the testbench which is run during the make rule. If you want to change testing parameters, find the following lines:
+
 **50, 51**: Change the start and end quantities, expressed in decimal. You only need to change the actual number on the left of the multiplication sign, and the number will automatically be converted to the correct binary fixed-point representation by the equations.
 
 **64**: Change the number of samples tested in between the start and end quantities.

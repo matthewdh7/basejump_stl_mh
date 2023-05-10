@@ -48,8 +48,8 @@ double theta_final = theta_max_compute(negprec, posiprec);
 
 // Only need to change the decimal number, format automatically fixed by mult
 double maxquant = 5.0 * pow(2,precision);							  
-unsigned long int startquant = 0.01 * pow(2,precision);
-unsigned long int currquant = startquant;
+double startquant = 0.01 * pow(2,precision);
+double currquant = startquant;
 
 // OLD NOTE FROM OLD TESTBENCH
 // The starting quantity is a very important parameter of testing. Due to truncation effect
@@ -65,7 +65,7 @@ unsigned long int numsamples = 1000;
 unsigned long int numsamples_tanh;
 unsigned long int numsamples_sig;
 
-unsigned long int sample_width = round((maxquant-startquant)/numsamples);
+double sample_width = round((maxquant-startquant)/numsamples);
 																																	
 unsigned long int *samples;													
 

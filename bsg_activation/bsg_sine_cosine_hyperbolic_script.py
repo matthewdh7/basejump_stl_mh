@@ -240,8 +240,6 @@ posprec = (int)(sys.argv[4])
 
 precision = (int)(sys.argv[5])
 
-startquant_pow = (int)(sys.argv[6])
-
 extriter = 1
 
 bsg_exponential_main_initial(angbitlen, ansbitlen, negprec, posprec, extriter)
@@ -259,7 +257,6 @@ f_params.write('#ifndef PARAMS_DEF\n')
 f_params.write('#define PARAMS_DEF\n')
 f_params.write('int anglen = %(g)d;\n'%{'g':angbitlen})
 f_params.write('int anslen = %(s)d;\n'%{'s':ansbitlen})
-f_params.write('int startquant_pow = %(s)d;\n'%{'s':startquant_pow})
 f_params.write('int posiprec = %(p)d;\n'%{'p':posprec})
 f_params.write('int negprec = %(n)d;\n'%{'n':negprec})
 f_params.write('int precision = %(p)d;\n'%{'p':precision})

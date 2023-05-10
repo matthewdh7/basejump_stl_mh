@@ -170,7 +170,7 @@ always_comb begin
     if (zero_bypass) data_n = 'd0;
     else if (sinh_lo[cordic_width_lp-1:precision+4] > 'd0 && tanh_sel_i)      data_n = {1'b1, precision'(0)};
     else if (divider_lo[internal_width_lp-1:precision] >= 'd1 || one_bypass)    data_n = {1'b1, precision'(0)};
-    else             data_n = divider_lo[ans_width_lp-1:0];
+    else             data_n = divider_lo[0+:ans_width_lp];
 end
 
 logic signed [ans_width_lp-1:0] data_r, data_n;

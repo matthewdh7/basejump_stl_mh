@@ -30,5 +30,6 @@ The file bsg_activation_test.cpp contains the testbench which is run during the 
 **64**: Change the number of samples tested in between the start and end quantities.
 
 **109**: Change `tanh_sel_i` to choose between testing sigmoid and tanh. Or, uncomment the line above for random testing.
+For the function that is not being tested, the error number is insignificant.
 
 Error calculations take place beyond line 143. Outputs are read and converted between 2s comp and decimal, and negated if needed, then compared with the c++ "theoretical" values for accuracy calculations.

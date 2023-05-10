@@ -106,7 +106,7 @@ int main(int argc, char **argv, char **env)
 				samp_len++;
 
 				//top->tanh_sel_i = rand() % 2;
-				top->tanh_sel_i = 0; // ***CHANGE HERE FOR SIGMOID/TANH
+				top->tanh_sel_i = 1; // ***CHANGE HERE FOR SIGMOID/TANH
 				tanh_sel[i] = top->tanh_sel_i;
 				
 				top->val_i = 1;
